@@ -1,5 +1,3 @@
-import NumericFormat from 'react-number-format'
-
 interface CreateTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>
 }
@@ -62,11 +60,19 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
           </select>
         </div>
         <div className="modal-action">
-          <button className="btn btn-sm btn-outline btn-error">Cancel</button>
+          <button
+            className="btn btn-sm btn-outline btn-error"
+            onClick={() => {
+              props.modalRef.current?.close()
+            }}
+          >
+            Cancel
+          </button>
           <button
             className="btn btn-sm btn-outline btn-success"
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault()
+              console.log(e)
+              props.modalRef.current?.close()
             }}
           >
             Create
