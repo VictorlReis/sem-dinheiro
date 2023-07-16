@@ -4,7 +4,7 @@ export const Header = () => {
   const { data: sessionData } = useSession()
 
   return (
-    <div className="navbar bg-secondary-content text-primary">
+    <div className="navbar bg-neutral text-neutral-content">
       <div className="flex-1 pl-5 text-3xl font-bold">
         {sessionData?.user?.name
           ? `Sem dinheiro, ${sessionData.user.name}?`

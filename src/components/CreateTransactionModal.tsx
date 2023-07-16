@@ -6,6 +6,7 @@ import { createTransactionDto } from '@/dto/transactions.dto'
 
 interface CreateTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>
+  refetch: () => void
 }
 
 const formSchema = createTransactionDto
@@ -27,11 +28,11 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
   const { mutate: createTransaction } = api.transaction.create.useMutation({
     onSuccess: (data) => {
       console.log(data)
+      props.refetch()
     },
   })
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
     createTransaction(data)
     reset()
     props.modalRef.current?.close()
@@ -54,9 +55,9 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
               placeholder="Descrição"
               className="input input-md input-bordered input-secondary w-full"
             />
-            <span className="text-error">
-              {errors.description && errors.description.message?.toString()}
-            </span>
+            {/*<span className="text-error">*/}
+            {/*  {errors.description && errors.description.message?.toString()}*/}
+            {/*</span>*/}
             <article className="flex space-x-3">
               <input
                 {...register('category')}
@@ -77,12 +78,15 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                   setValueAs: (value) => Number(value),
                 })}
                 type="number"
+                min="0.00"
+                max="10000.00"
+                step="0.01"
                 placeholder="Valor"
                 className="input input-md input-bordered input-secondary w-36"
               />
-              <span className="text-error">
-                {errors.amount && errors.amount.message?.toString()}
-              </span>
+              {/*<span className="text-error">*/}
+              {/*  {errors.amount && errors.amount.message?.toString()}*/}
+              {/*</span>*/}
               <input
                 {...register('date', {
                   setValueAs: (value: string) => new Date(value),
@@ -91,14 +95,20 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 placeholder="Data"
                 className="input input-md input-bordered input-secondary w-36"
               />
+              {/*<span className="text-error">*/}
+              {/*  {errors.date && errors.date.message?.toString()}*/}
+              {/*</span>*/}
               <select
                 {...register('type')}
                 className="input input-md input-bordered input-secondary w-34"
                 defaultValue="expense"
               >
-                <option value="expense">Entrada</option>
-                <option value="income">Saída</option>
+                <option value="expense">Saída</option>
+                <option value="income">Entrada</option>
               </select>
+              {/*<span className="text-error">*/}
+              {/*  {errors.type && errors.type.message?.toString()}*/}
+              {/*</span>*/}
             </article>
           </div>
           <div className="modal-action">

@@ -6,6 +6,7 @@ import { api } from '@/utils/api'
 import { useRef, useState } from 'react'
 import { log } from 'next/dist/server/typescript/utils'
 import CreateTransactionModal from '@/components/CreateTransactionModal'
+import { TransactionsTable } from '@/components/TransactionsTable'
 
 const Home: NextPage = () => {
   return (
@@ -50,27 +51,27 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <div className="h-fit mx-8">
-        <div className="flex space-x-4 mt-6">
+      <div className="h-fit mx-8 my-8">
+        <div className="flex space-x-4 mb-5">
           <button
-            className="btn btn-secondary btn-outline"
+            className="btn btn-secondary btn-outline btn-sm"
             onClick={() => showModal()}
           >
             Nova transação
           </button>
           <button
-            className="btn btn-secondary btn-outline"
+            className="btn btn-secondary btn-outline btn-sm"
             onClick={() => console.log('alo')}
           >
             Importar csv
           </button>
         </div>
-        {transactions &&
-          transactions.map((transaction) => (
-            <div key={transaction.id}>{transaction.description}</div>
-          ))}
+        <TransactionsTable
+          transactions={transactions ?? []}
+          refetch={refetch}
+        />
       </div>
-      <CreateTransactionModal modalRef={modalRef} />
+      <CreateTransactionModal modalRef={modalRef} refetch={refetch} />
     </>
   )
 }
