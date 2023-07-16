@@ -6,7 +6,9 @@ export const Header = () => {
   return (
     <div className="navbar bg-secondary-content text-primary">
       <div className="flex-1 pl-5 text-3xl font-bold">
-        {sessionData?.user?.name ? `Welcome, ${sessionData.user.name}` : ''}
+        {sessionData?.user?.name
+          ? `Sem dinheiro, ${sessionData.user.name}?`
+          : ''}
       </div>
       <div className="flex-none gap-2">
         <div className="dropdown-end dropdown">
@@ -28,7 +30,7 @@ export const Header = () => {
               className="btn-ghost rounded-btn btn"
               onClick={() => void signIn()}
             >
-              Sign in
+              Login
             </button>
           )}
         </div>

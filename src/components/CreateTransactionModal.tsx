@@ -1,82 +1,123 @@
+import { type z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '@/utils/api'
+import { createTransactionDto } from '@/dto/transactions.dto'
+
 interface CreateTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>
 }
 
+const formSchema = createTransactionDto
+
+export type FormData = z.infer<typeof formSchema>
+
 const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
   props,
 ) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+  })
+
+  const { mutate: createTransaction } = api.transaction.create.useMutation({
+    onSuccess: (data) => {
+      console.log(data)
+    },
+  })
+
+  const onSubmit = (data: FormData) => {
+    console.log(data)
+    createTransaction(data)
+    reset()
+    props.modalRef.current?.close()
+  }
+
   return (
     <dialog id="create_modal" className="modal" ref={props.modalRef}>
       <form
-        method="dialog"
         className="modal-box flex flex-col space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault()
-        }}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <header>
-          <h3 className="font-bold text-lg">New Transaction</h3>
-        </header>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Description"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <input
-            type="date"
-            placeholder="Date"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <input
-            type="text"
-            placeholder="Payment Method"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <input
-            type="text"
-            placeholder="Category"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <input
-            type="text"
-            placeholder="Payment Method"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <input
-            type="number"
-            min="0.00"
-            max="10000.00"
-            step="0.01"
-            placeholder="Amount"
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-          />
-          <select
-            className="input input-md input-bordered input-secondary w-full max-w-xs"
-            defaultValue="expense"
-          >
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-          </select>
-        </div>
-        <div className="modal-action">
-          <button
-            className="btn btn-sm btn-outline btn-error"
-            onClick={() => {
-              props.modalRef.current?.close()
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            className="btn btn-sm btn-outline btn-success"
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              console.log(e)
-              props.modalRef.current?.close()
-            }}
-          >
-            Create
-          </button>
+        <div className="flex flex-col items-center">
+          <header className="mb-4">
+            <h1 className="font-bold text-[1.5em]">Nova Transação</h1>
+          </header>
+          <div className="flex flex-col items-center space-y-4">
+            <input
+              {...register('description')}
+              type="text"
+              placeholder="Descrição"
+              className="input input-md input-bordered input-secondary w-full"
+            />
+            <span className="text-error">
+              {errors.description && errors.description.message?.toString()}
+            </span>
+            <article className="flex space-x-3">
+              <input
+                {...register('category')}
+                type="text"
+                placeholder="Categoria"
+                className="input input-md input-bordered input-secondary"
+              />
+              <input
+                {...register('paymentMethod')}
+                type="text"
+                placeholder="Método de pagamento"
+                className="input input-md input-bordered input-secondary w-52"
+              />
+            </article>
+            <article className="flex space-x-3">
+              <input
+                {...register('amount', {
+                  setValueAs: (value) => Number(value),
+                })}
+                type="number"
+                placeholder="Valor"
+                className="input input-md input-bordered input-secondary w-36"
+              />
+              <span className="text-error">
+                {errors.amount && errors.amount.message?.toString()}
+              </span>
+              <input
+                {...register('date', {
+                  setValueAs: (value: string) => new Date(value),
+                })}
+                type="date"
+                placeholder="Data"
+                className="input input-md input-bordered input-secondary w-36"
+              />
+              <select
+                {...register('type')}
+                className="input input-md input-bordered input-secondary w-34"
+                defaultValue="expense"
+              >
+                <option value="expense">Entrada</option>
+                <option value="income">Saída</option>
+              </select>
+            </article>
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn btn-sm btn-outline btn-error"
+              onClick={() => {
+                props.modalRef.current?.close()
+              }}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="btn btn-sm btn-outline btn-success"
+              disabled={isSubmitting}
+            >
+              Criar
+            </button>
+          </div>
         </div>
       </form>
     </dialog>

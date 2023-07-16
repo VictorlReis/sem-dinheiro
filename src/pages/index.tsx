@@ -56,18 +56,18 @@ const Content: React.FC = () => {
             className="btn btn-secondary btn-outline"
             onClick={() => showModal()}
           >
-            Create Transaction
+            Nova transação
           </button>
           <button
             className="btn btn-secondary btn-outline"
             onClick={() => console.log('alo')}
           >
-            Import csv
+            Importar csv
           </button>
         </div>
         {transactions &&
           transactions.map((transaction) => (
-            <div key={transaction.id}>{transaction.id}</div>
+            <div key={transaction.id}>{transaction.description}</div>
           ))}
       </div>
       <CreateTransactionModal modalRef={modalRef} />
