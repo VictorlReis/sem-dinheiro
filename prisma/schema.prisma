@@ -49,6 +49,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    transactions  Transaction[]
 }
 
 model VerificationToken {
@@ -57,4 +58,15 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Transaction {
+    id String @id @default(cuid())
+    type String
+    date DateTime
+    paymentMethod String
+    category String
+    amount Float
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

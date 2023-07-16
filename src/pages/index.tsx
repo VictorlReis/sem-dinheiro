@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { Header } from '@/components/Header'
 import { type NextPage } from 'next'
+import { api } from '@/utils/api'
 
 const Home: NextPage = () => {
   return (
@@ -23,6 +24,17 @@ export default Home
 
 const Content: React.FC = () => {
   const { data: sessionData } = useSession()
+
+  const { data: transactions, refetch } =
+    api.transaction.getMonthlyTransactions.useQuery(
+      {
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
+      },
+      {
+        enabled: !!sessionData?.user,
+      },
+    )
 
   return <div className="bg-neutral">Content</div>
 }

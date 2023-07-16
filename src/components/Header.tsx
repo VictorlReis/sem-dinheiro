@@ -1,5 +1,4 @@
 import { signIn, signOut, useSession } from 'next-auth/react'
-import Image from 'next/Image'
 
 export const Header = () => {
   const { data: sessionData } = useSession()

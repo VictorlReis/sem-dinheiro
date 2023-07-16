@@ -7,6 +7,6 @@ export default {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ['dracula', 'corporate'],
+    themes: ['dracula', 'corporate', 'business'],
   },
 } satisfies Config
