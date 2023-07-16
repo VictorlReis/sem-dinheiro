@@ -62,6 +62,7 @@ model VerificationToken {
 
 model Transaction {
     id String @id @default(cuid())
+    description String
     type String
     date DateTime
     paymentMethod String

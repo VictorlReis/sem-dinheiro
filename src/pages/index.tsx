@@ -3,6 +3,9 @@ import Head from 'next/head'
 import { Header } from '@/components/Header'
 import { type NextPage } from 'next'
 import { api } from '@/utils/api'
+import { useRef, useState } from 'react'
+import { log } from 'next/dist/server/typescript/utils'
+import CreateTransactionModal from '@/components/CreateTransactionModal'
 
 const Home: NextPage = () => {
   return (
@@ -23,18 +26,51 @@ const Home: NextPage = () => {
 export default Home
 
 const Content: React.FC = () => {
+  const modalRef = useRef<HTMLDialogElement>(null)
+
   const { data: sessionData } = useSession()
+
+  const [month, setMonth] = useState(new Date().getMonth() + 1)
+  const [year, setYear] = useState(new Date().getFullYear())
 
   const { data: transactions, refetch } =
     api.transaction.getMonthlyTransactions.useQuery(
       {
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear(),
+        month,
+        year,
       },
       {
         enabled: !!sessionData?.user,
       },
     )
 
-  return <div className="bg-neutral">Content</div>
+  const showModal = () => {
+    if (modalRef.current) modalRef.current.showModal()
+  }
+
+  return (
+    <>
+      <div className="h-fit mx-8">
+        <div className="flex space-x-4 mt-6">
+          <button
+            className="btn btn-secondary btn-outline"
+            onClick={() => showModal()}
+          >
+            Create Transaction
+          </button>
+          <button
+            className="btn btn-secondary btn-outline"
+            onClick={() => console.log('alo')}
+          >
+            Import csv
+          </button>
+        </div>
+        {transactions &&
+          transactions.map((transaction) => (
+            <div key={transaction.id}>{transaction.id}</div>
+          ))}
+      </div>
+      <CreateTransactionModal modalRef={modalRef} />
+    </>
+  )
 }
