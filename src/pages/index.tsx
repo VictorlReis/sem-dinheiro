@@ -7,6 +7,7 @@ import { useRef, useState } from 'react'
 import { log } from 'next/dist/server/typescript/utils'
 import CreateTransactionModal from '@/components/CreateTransactionModal'
 import { TransactionsTable } from '@/components/TransactionsTable'
+import MonthlyChart from '@/components/MonthlyChart'
 
 const Home: NextPage = () => {
   return (
@@ -66,10 +67,17 @@ const Content: React.FC = () => {
             Importar csv
           </button>
         </div>
-        <TransactionsTable
-          transactions={transactions ?? []}
-          refetch={refetch}
-        />
+        <div className="flex-row">
+          <div className="w-1/2">
+            <TransactionsTable
+              transactions={transactions ?? []}
+              refetch={refetch}
+            />
+          </div>
+          <div className="w-1/2">
+            <MonthlyChart transactions={transactions ?? []} />
+          </div>
+        </div>
       </div>
       <CreateTransactionModal modalRef={modalRef} refetch={refetch} />
     </>
