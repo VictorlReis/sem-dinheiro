@@ -1,192 +1,203 @@
-import {type Transaction} from '.prisma/client'
-import {api} from '@/utils/api'
-import { useState} from "react";
-import {AiFillSave, AiOutlineCloseCircle} from "react-icons/ai";
+import { type Transaction } from '.prisma/client'
+import { api } from '@/utils/api'
+import { useState } from 'react'
+import {
+  AiFillSave,
+  AiOutlineCloseCircle,
+  AiFillDelete,
+  AiOutlineCheck,
+} from 'react-icons/ai'
+import { MdDelete } from 'react-icons/md'
 
 interface TransactionsTableProps {
-    transactions: Transaction[]
-    refetch: () => void
+  transactions: Transaction[]
+  refetch: () => void
 }
 
 const trasactionTypeMap: Record<string, string> = {
-    expense: "saida",
-    income: "entrada"
+  expense: 'Saída',
+  income: 'Entrada',
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
-    const [selectedType, setSelectedType] = useState('');
-    const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState('');
-    const [date, setDate] = useState('');
-    const [amount, setAmount] = useState<number>(0);
-    const [rowBeenEdited, setRowBeenEdited] = useState('');
+  const [selectedType, setSelectedType] = useState('')
+  const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [date, setDate] = useState('')
+  const [amount, setAmount] = useState<number>(0)
+  const [rowBeenEdited, setRowBeenEdited] = useState('')
 
-    const {mutate: deleteTransaction} = api.transaction.delete.useMutation({
-        onSuccess: (data) => {
-            console.log(data);
-            props.refetch();
-        },
-    });
+  const { mutate: deleteTransaction } = api.transaction.delete.useMutation({
+    onSuccess: (data) => {
+      props.refetch()
+    },
+  })
 
-    const {mutate: editTransaction} = api.transaction.update.useMutation({
-        onSuccess: (data) => {
-            console.log(data);
-            cancelEdit()
-            props.refetch();
-        },
-    });
+  const { mutate: editTransaction } = api.transaction.update.useMutation({
+    onSuccess: (data) => {
+      cancelEdit()
+      props.refetch()
+    },
+  })
 
+  const editRow = (transaction: (typeof props.transactions)[0]) => {
+    setRowBeenEdited(transaction.id)
+    setSelectedType(transaction.type)
+    setDescription(transaction.description)
+    setCategory(transaction.category)
+    setPaymentMethod(transaction.paymentMethod)
+    setAmount(transaction.amount)
+    setDate(transaction.date.toISOString().split('T')[0] as string)
+  }
 
-    const editRow = (transaction: typeof props.transactions[0]) => {
-        setRowBeenEdited(transaction.id)
-        setSelectedType(transaction.type)
-        setDescription(transaction.description)
-        setCategory(transaction.category)
-        setPaymentMethod(transaction.paymentMethod)
-        setAmount(transaction.amount)
-        setDate(transaction.date.toISOString().split('T')[0] as string)
-    };
+  const cancelEdit = () => {
+    setRowBeenEdited('')
+  }
 
-    const cancelEdit = () => {
-        setRowBeenEdited("")
-    };
+  const canSave = !!(
+    description &&
+    category &&
+    paymentMethod &&
+    date &&
+    selectedType &&
+    amount
+  )
 
-    const canSave =
-        !!(description && category && paymentMethod && date && selectedType && amount);
+  const saveEditedRow = (id: string) => {
+    if (canSave) {
+      editTransaction({
+        description,
+        id,
+        category,
+        paymentMethod,
+        type: selectedType,
+        date: new Date(date),
+        amount: amount,
+      })
+    }
+  }
 
-    const saveEditedRow = (id: string) => {
-        if (canSave) {
-            editTransaction({
-                description,
-                id,
-                category,
-                paymentMethod,
-                type: selectedType,
-                date: new Date(date),
-                amount: amount,
-            });
-        }
-    };
-
-    return (
-        <div className="overflow-x-auto">
-            <table className="table table-sm">
-                <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                    <th>Category</th>
-                    <th>Método Pagamento</th>
-                    <th>Data</th>
-                    <th>Valor</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {props.transactions?.map((transaction) => (
-                    <tr
-                        key={transaction.id}
-                        onDoubleClick={() => editRow(transaction)}
-                        className={rowBeenEdited === transaction.id ? 'bg-secondary' : ''}
+  return (
+    <div className="overflow-x-auto">
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Método</th>
+            <th>Data</th>
+            <th>Valor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.transactions?.map((transaction) => (
+            <tr
+              key={transaction.id}
+              onDoubleClick={() => editRow(transaction)}
+              className={
+                rowBeenEdited === transaction.id ? 'bg-neutral-focus' : ''
+              }
+            >
+              {rowBeenEdited === transaction.id ? (
+                <>
+                  <td>
+                    <select
+                      className="input input-ghost input-sm w-20"
+                      value={selectedType}
+                      onChange={(e) => setSelectedType(e.target.value)}
                     >
-                        {rowBeenEdited === transaction.id ? (
-                            <>
-                                <td>
-                                    <select
-                                        className="input input-ghost input-sm w-20"
-                                        value={selectedType}
-                                        onChange={(e) => setSelectedType(e.target.value)}
-                                    >
-                                        <option value="expense">Saída</option>
-                                        <option value="income">Entrada</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input
-                                        className="input input-ghost input-sm w-32"
-                                        type="text"
-                                        defaultValue={transaction.description}
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        className="input input-ghost input-sm w-32"
-                                        type="text"
-                                        value={category}
-                                        onChange={(e) => setCategory(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        className="input input-ghost input-sm w-32"
-                                        type="text"
-                                        value={paymentMethod}
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        className="input input-ghost input-sm w-32"
-                                        type="date"
-                                        value={date}
-                                        onChange={(e) => setDate(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        className="input input-ghost input-sm w-20"
-                                        type="number"
-                                        min="0.00"
-                                        max="10000.00"
-                                        step="0.01"
-                                        value={amount}
-                                        onChange={(e) => setAmount(+e.target.value)}
-                                    />
-                                </td>
-                            </>
-                        ) : (
-                            <>
-                                <td>{trasactionTypeMap[transaction.type]}</td>
-                                <td>{transaction.description}</td>
-                                <td>{transaction.category}</td>
-                                <td>{transaction.paymentMethod}</td>
-                                <td>{transaction.date.toLocaleDateString()}</td>
-                                <td>{transaction.amount}</td>
-                            </>
-                        )}
-                        <td>
-                            {rowBeenEdited === transaction.id ? (
-                                <div className="flex gap-2">
-                                    <button
-                                        className="btn btn-primary btn-sm"
-                                        onClick={() => saveEditedRow(transaction.id)}
-                                        disabled={!canSave}
-                                    >
-                                        <AiFillSave size={20}/>
-                                    </button>
-                                    <button
-                                        className="btn btn-accent btn-sm"
-                                        onClick={() => cancelEdit()}
-                                    >
-                                        <AiOutlineCloseCircle size={20}/>
-                                    </button>
-                                </div>
-                            ) : (
-                                <button
-                                    className="btn btn-error btn-sm btn-outline"
-                                    onClick={() => deleteTransaction({id: transaction.id})}
-                                >
-                                    Excluir
-                                </button>
-                            )}
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
-    );
-};
+                      <option value="expense">Saída</option>
+                      <option value="income">Entrada</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      className="input input-ghost input-sm w-32"
+                      type="text"
+                      defaultValue={transaction.description}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input input-ghost input-sm w-32"
+                      type="text"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input input-ghost input-sm w-32"
+                      type="text"
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input input-ghost input-sm w-32"
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input input-ghost input-sm w-20"
+                      type="number"
+                      min="0.00"
+                      max="10000.00"
+                      step="0.01"
+                      value={amount}
+                      onChange={(e) => setAmount(+e.target.value)}
+                    />
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td>{trasactionTypeMap[transaction.type]}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.paymentMethod}</td>
+                  <td>{transaction.date.toLocaleDateString()}</td>
+                  <td>{transaction.amount}</td>
+                </>
+              )}
+              <td>
+                {rowBeenEdited === transaction.id ? (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => saveEditedRow(transaction.id)}
+                      className="text-success"
+                      disabled={!canSave}
+                    >
+                      <AiOutlineCheck size={20} />
+                    </button>
+                    <button
+                      onClick={() => cancelEdit()}
+                      className="text-accent"
+                    >
+                      <AiOutlineCloseCircle size={20} />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="text-error ml-2"
+                    onClick={() => deleteTransaction({ id: transaction.id })}
+                  >
+                    <MdDelete size={20} />
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}

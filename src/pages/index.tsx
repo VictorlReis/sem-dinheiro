@@ -8,6 +8,7 @@ import { log } from 'next/dist/server/typescript/utils'
 import CreateTransactionModal from '@/components/CreateTransactionModal'
 import { TransactionsTable } from '@/components/TransactionsTable'
 import MonthlyChart from '@/components/MonthlyChart'
+import DateFilter from '@/components/DateFilter'
 
 const Home: NextPage = () => {
   return (
@@ -45,30 +46,69 @@ const Content: React.FC = () => {
         enabled: !!sessionData?.user,
       },
     )
+  const { mutate: importCsv } = api.transaction.importCsv.useMutation({
+    onSuccess: (data) => {
+      console.log(data)
+    },
+  })
 
   const showModal = () => {
     if (modalRef.current) modalRef.current.showModal()
   }
 
+  const onClickCsvButton = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      try {
+        const formData = new FormData()
+        formData.append('file', file, file.name)
+
+        importCsv({ file: file })
+      } catch (error) {
+        console.log(`Error uploading CSV file: ${error as string}`)
+      }
+    }
+  }
+
   return (
     <>
       <div className="h-fit mx-8 my-8">
-        <div className="flex space-x-4 mb-5">
-          <button
-            className="btn btn-secondary btn-outline btn-sm"
-            onClick={() => showModal()}
-          >
-            Nova transação
-          </button>
-          <button
-            className="btn btn-secondary btn-outline btn-sm"
-            onClick={() => console.log('alo')}
-          >
-            Importar csv
-          </button>
-        </div>
-        <div className="flex-row">
+        <div className="flex">
           <div className="w-1/2">
+            <div className="flex justify-between">
+              <div className="flex space-x-4 mb-5">
+                <button
+                  className="btn btn-secondary btn-outline btn-sm"
+                  onClick={() => showModal()}
+                >
+                  Nova transação
+                </button>
+                <button
+                  className="btn btn-secondary btn-outline btn-sm"
+                  onClick={() => console.log('alo')}
+                >
+                  Importar csv
+                  <input
+                    type="file"
+                    accept=".csv"
+                    style={{ display: 'none' }}
+                    onChange={(e) => onClickCsvButton(e)}
+                  />
+                </button>
+              </div>
+              <div>
+                <DateFilter
+                  selectedMonth={month}
+                  selectedYear={year}
+                  onChangeMonth={(e) => {
+                    setMonth(Number(e.target.value))
+                  }}
+                  onChangeYear={(e) => {
+                    setYear(Number(e.target.value))
+                  }}
+                />
+              </div>
+            </div>
             <TransactionsTable
               transactions={transactions ?? []}
               refetch={refetch}
