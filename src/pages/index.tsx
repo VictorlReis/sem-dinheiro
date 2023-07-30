@@ -52,8 +52,13 @@ const Content: React.FC = () => {
     )
 
   const { mutate: importCsv } = api.transaction.importCsv.useMutation({
-    onSuccess: (data) => {
-      console.log(data)
+    onSuccess: () => {
+      void refetch()
+    },
+  }) 
+  const { mutate: importCsvBackup } = api.transaction.importCsvBackup.useMutation({
+    onSuccess: () => {
+      void refetch()
     },
   })
 
@@ -95,7 +100,7 @@ const importDataFromCsv = (data: string): {
 
   if (lines.length < 2) throw new Error('Invalid CSV format');
 
-  const jsonData: {
+  const backupData: {
     description: string;
     type: string;
     date: string;
@@ -136,13 +141,12 @@ const importDataFromCsv = (data: string): {
           category,
           amount,
         };
-        jsonData.push(row);
+        backupData.push(row);
       }
     }
   }
 
-  console.log(jsonData);
-  return jsonData;
+  return backupData;
 };
  
 const onClickCsvBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +159,7 @@ const onClickCsvBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
           const csvString = fileReader.result as string;
   
           try {
-            importDataFromCsv(csvString)
+            importCsvBackup(importDataFromCsv(csvString))
             void refetch();
   
           } catch (error) {
@@ -278,7 +282,7 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
               <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
             </section>
             <MonthlyChart transactions={transactions ?? []} />
-                  <button
+                  {/* <button
                   className="btn btn-secondary btn-outline btn-sm"
                 >
                   <input
@@ -288,7 +292,7 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
                     onChange={(e) => onClickCsvBackup(e)}
                   />
                   Importar backup
-              </button>
+              </button> */}
           </div>
         </div>
       </div>

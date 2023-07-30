@@ -18,3 +18,14 @@ export const CsvData = z.object({
   estabelecimento: z.string(),
   valor: z.string(),
 })
+
+export const createTransactionBackup = z
+  .object({
+    description: z.string(),
+    category: z.string(),
+    paymentMethod: z.string(),
+    type: z.string(),
+    amount: z.string(),
+    date: z.string()
+  })
+  .required()

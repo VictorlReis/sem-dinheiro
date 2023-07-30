@@ -10,6 +10,7 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 
 const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
   const categoryData = transactions.reduce((acc, transaction) => {
+    if(transaction.type === 'income') return acc;
     const { category, amount } = transaction;
 
     if (!acc[category]) {
@@ -73,7 +74,7 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
       {
         data: amounts,
         backgroundColor: colorsArray,
-        borderColor: '#2a323c',
+        borderColor: '#2a323b',
         borderWidth: 1,
         hoverOffset: 4,
       },
