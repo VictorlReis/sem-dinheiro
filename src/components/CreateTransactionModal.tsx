@@ -20,14 +20,13 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   })
 
   const { mutate: createTransaction } = api.transaction.create.useMutation({
-    onSuccess: (data) => {
-      console.log(data)
+    onSuccess: () => {
       props.refetch()
     },
   })
@@ -55,9 +54,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
               placeholder="Descrição"
               className="input input-md input-bordered input-secondary w-full"
             />
-            {/*<span className="text-error">*/}
-            {/*  {errors.description && errors.description.message?.toString()}*/}
-            {/*</span>*/}
             <article className="flex space-x-3">
               <input
                 {...register('category')}
@@ -84,20 +80,15 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 placeholder="Valor"
                 className="input input-md input-bordered input-secondary w-36"
               />
-              {/*<span className="text-error">*/}
-              {/*  {errors.amount && errors.amount.message?.toString()}*/}
-              {/*</span>*/}
               <input
                 {...register('date', {
                   setValueAs: (value: string) => new Date(value),
                 })}
                 type="date"
+                value={new Date().toISOString().slice(0, 10)}
                 placeholder="Data"
                 className="input input-md input-bordered input-secondary w-36"
               />
-              {/*<span className="text-error">*/}
-              {/*  {errors.date && errors.date.message?.toString()}*/}
-              {/*</span>*/}
               <select
                 {...register('type')}
                 className="input input-md input-bordered input-secondary w-34"
@@ -106,9 +97,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 <option value="expense">Saída</option>
                 <option value="income">Entrada</option>
               </select>
-              {/*<span className="text-error">*/}
-              {/*  {errors.type && errors.type.message?.toString()}*/}
-              {/*</span>*/}
             </article>
           </div>
           <div className="modal-action">

@@ -9,9 +9,19 @@ interface MonthlyChartProps {
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
-  const amounts = transactions.map((transaction) => transaction.amount)
-  const categories = transactions.map((transaction) => transaction.category)
+  const categoryData = transactions.reduce((acc, transaction) => {
+    const { category, amount } = transaction;
 
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+
+    acc[category] += amount;
+    return acc;
+  }, {});
+
+  const categories = Object.keys(categoryData);
+  const amounts = Object.values(categoryData);
   const colorsArray = [
     '#858bb0',
     '#ff7b7b',
@@ -63,19 +73,23 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
       {
         data: amounts,
         backgroundColor: colorsArray,
-        borderColor: colorsArray,
+        borderColor: '#2a323c',
         borderWidth: 1,
+        hoverOffset: 4,
       },
     ],
   }
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
-    // Customize other chart options as needed
-  }
+    maintainAspectRatio: true,
+    legend: {
+      display: true,
+      position: 'chartArea'
+    },
+  };
 
-  return <Pie data={data} options={options} />
+  return <div className='h-[30em] w-[30em] ml-32'><Pie data={data} options={options} /></div>
 }
 
 export default MonthlyChart

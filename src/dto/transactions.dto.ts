@@ -13,3 +13,8 @@ export const createTransactionDto = z
     }),
   })
   .required()
+
+export const CsvData = z.object({
+  estabelecimento: z.string(),
+  valor: z.string(),
+})

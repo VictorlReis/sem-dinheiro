@@ -1,87 +1,35 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
-import { createTransactionDto } from '@/dto/transactions.dto'
-import * as fs from 'fs'
-import { type Transaction } from '.prisma/client'
+import { CsvData, createTransactionDto } from '@/dto/transactions.dto'
 
-const processCsvTransactions = (csvText: string, userId: string) => {
-  const lines = csvText.split('\n')
-
-  const transactions = []
-
-  // Start from index 1 to skip the header line
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i]?.trim()
-
-    if (line === '' || !line) {
-      continue // Skip empty lines
-    }
-
-    const columns = line.split(';')
-
-    const csvTransaction = {
-      Data: columns[0],
-      Estabelecimento: columns[1],
-      Portador: columns[2],
-      Valor: columns[3],
-      Parcela: columns[4],
-    }
-
-    const textValue = csvTransaction.Valor?.replace('R$ ', '')
-      .replace('.', '')
-      .replace(',', '.')
-      .trim()
-    if (!textValue || textValue?.includes('-')) {
-      continue // Skip negative values
-    }
-
-    const valor = parseFloat(textValue)
-
-    if (isNaN(valor) || valor < 0) {
-      continue // Skip invalid or negative values
-    }
-    if (!csvTransaction.Estabelecimento) {
-      continue // Skip transactions without description
-    }
-
-    const transaction = {
-      description: csvTransaction.Estabelecimento,
-      type: 'expense',
-      date: new Date(),
-      category: 'xp csv',
-      amount: valor,
-      userId: userId,
-      paymentMethod: 'xp csv',
-    }
-
-    transactions.push(transaction)
-  }
-
-  return transactions
-}
 
 export const transactionRouter = createTRPCRouter({
   importCsv: protectedProcedure
-    .input(z.object({ file: z.string() }))
+    .input(z.array(CsvData))
     .mutation(async ({ input, ctx }) => {
-      const filePath = input.file
-      try {
-        const csvText = fs.readFileSync(filePath, 'utf-8')
-        const transactions = processCsvTransactions(
-          csvText,
-          ctx.session.user.id,
-        )
-        await ctx.prisma.transaction.createMany({
-          data: transactions,
-        })
+      console.log(input);
 
-        return 'CSV file imported successfully.'
-      } catch (error) {
-        console.error('Error importing CSV file:', error)
-        throw new Error('Failed to import CSV file.')
-      }
+      const transactions = input.map((row) => {
+        const date = new Date()
+        const amount = parseFloat(row.valor.replace('R$', '').replace(',', '.'))
+
+        return {
+          description: row.estabelecimento,
+          type: 'expense',
+          date,
+          paymentMethod: 'xp',
+          category: 'other',
+          amount,
+          userId: ctx.session.user.id,
+        }
+      })
+
+      console.log(transactions);
+
+      return ctx.prisma.transaction.createMany({
+        data: transactions,
+      })
     }),
-
   create: protectedProcedure
     .input(createTransactionDto)
     .mutation(({ input, ctx }) => {
