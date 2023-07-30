@@ -57,6 +57,12 @@ const Content: React.FC = () => {
     },
   }) 
 
+  const { mutate: createNubankAccount } = api.nubank.createNubankAccount.useMutation({
+    onSuccess: () => {
+      void refetch()
+    },
+  })
+
   useEffect(() => {
     if (transactions) {
       sumTotal(transactions)
@@ -118,7 +124,6 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
   const estabelecimentoIndex = headers.indexOf('Estabelecimento');
   const valorIndex = headers.indexOf('Valor');
 
-
   const jsonData: { estabelecimento: string; valor: string; }[] = [];
 
   for (let i = 1; i < lines.length; i++) {
@@ -165,7 +170,11 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
                   />
                   Importar fatura XP (CSV)
                 </button>
-                <button className='btn btn-primary btn-outline btn-sm btn-disabled'>Conectar conta Nubank</button>
+                <button className='btn btn-primary btn-outline btn-sm btn-disabled' onClick={
+                  () => createNubankAccount({login: 'teste', password: 'teste'})
+                }>
+                  Conectar conta Nubank
+                </button>
               </div>
               <div>
                 <DateFilter

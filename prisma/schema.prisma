@@ -50,6 +50,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     transactions  Transaction[]
+    nubankAccounts NubankAccount[]
 }
 
 model VerificationToken {
@@ -71,3 +72,12 @@ model Transaction {
     userId String
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model NubankAccount {
+    id String @id @default(cuid())
+    login String
+    password String
+    userId String @unique
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
