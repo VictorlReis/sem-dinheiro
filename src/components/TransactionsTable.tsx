@@ -1,10 +1,8 @@
-import { type Transaction } from '.prisma/client'
+import { type Transaction } from '@prisma/client'
 import { api } from '@/utils/api'
 import { useState } from 'react'
 import {
-  AiFillSave,
   AiOutlineCloseCircle,
-  AiFillDelete,
   AiOutlineCheck,
 } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
@@ -29,13 +27,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   const [rowBeenEdited, setRowBeenEdited] = useState('')
 
   const { mutate: deleteTransaction } = api.transaction.delete.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       props.refetch()
     },
   })
 
   const { mutate: editTransaction } = api.transaction.update.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       cancelEdit()
       props.refetch()
     },
