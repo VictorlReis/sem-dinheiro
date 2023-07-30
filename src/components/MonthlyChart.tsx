@@ -22,10 +22,10 @@ const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
 
   acc[category] += amount;
   return acc;
-}, {} as { [key: string]: number }); // Specify the type for categoryData
+}, {} as { [key: string]: number }); 
 
-const categories: string[] = Object.keys(categoryData); // Specify the type for categories
-const amounts: number[] = Object.values(categoryData); // Specify the type for amounts
+const categories: string[] = Object.keys(categoryData); 
+const amounts: number[] = Object.values(categoryData); 
 
   const colorsArray = [
     '#858bb0',
