@@ -90,7 +90,7 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
     },
   };
 
-  return <div className='h-[30em] w-[30em] ml-32'><Pie data={data} options={options} /></div>
+  return <div className='h-[30em] w-[30em] ml-52'><Pie data={data} options={options} /></div>
 }
 
 export default MonthlyChart

@@ -1,43 +1,10 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
-import { CsvData, createTransactionBackup, createTransactionDto } from '@/dto/transactions.dto'
+import { CsvData, createTransactionDto } from '@/dto/transactions.dto'
 
 
 export const transactionRouter = createTRPCRouter({
-  importCsvBackup: protectedProcedure
-    .input(z.array(createTransactionBackup)).mutation(async ({ input, ctx }) => {
-      console.log(input);
-
-      const transactions = input.map((row) => {
-        // Convert date string to JavaScript Date object with format DD/MM/YYYY
-        const dateParts = row.date.split(' ')[0].split('-');
-        const jsDate = new Date(
-          parseInt(dateParts[0]),
-          parseInt(dateParts[1]) - 1, // JavaScript months are 0-based
-          parseInt(dateParts[2])
-        );
-
-        return {
-          description: row.description,
-          type: row.type,
-          date: jsDate, // Format as DD/MM/YYYY
-          paymentMethod: row.paymentMethod,
-          category: row.category,
-          amount: parseFloat(row.amount),
-          userId: ctx.session.user.id,
-        };
-      });
-
-      try {
-        console.log(transactions)
-        return await ctx.prisma.transaction.createMany({
-          data: transactions,
-        });
-      } catch (error) {
-        console.log(error)
-      }
-    }),
-  importCsv: protectedProcedure
+ importCsv: protectedProcedure
     .input(z.array(CsvData))
     .mutation(async ({ input, ctx }) => {
       const transactions = input.map((row) => {
@@ -54,8 +21,6 @@ export const transactionRouter = createTRPCRouter({
           userId: ctx.session.user.id,
         }
       })
-
-      console.log(transactions);
 
       return ctx.prisma.transaction.createMany({
         data: transactions,

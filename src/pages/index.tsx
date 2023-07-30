@@ -9,7 +9,7 @@ import { TransactionsTable } from '@/components/TransactionsTable'
 import MonthlyChart from '@/components/MonthlyChart'
 import DateFilter from '@/components/DateFilter'
 import ValueCard from '@/components/ValueCards'
-import { Transaction } from '@prisma/client'
+import { type Transaction } from '@prisma/client'
 
 const Home: NextPage = () => {
   return (
@@ -56,11 +56,6 @@ const Content: React.FC = () => {
       void refetch()
     },
   }) 
-  const { mutate: importCsvBackup } = api.transaction.importCsvBackup.useMutation({
-    onSuccess: () => {
-      void refetch()
-    },
-  })
 
   useEffect(() => {
     if (transactions) {
@@ -87,92 +82,6 @@ const Content: React.FC = () => {
   const showModal = () => {
     if (modalRef.current) modalRef.current.showModal()
   }
-
-const importDataFromCsv = (data: string): { 
-  description: string;
-  type: string;
-  date: string;
-  paymentMethod: string;
-  category: string;
-  amount: string;
-}[] => {
-  const lines: string[] = data.split('\n');
-
-  if (lines.length < 2) throw new Error('Invalid CSV format');
-
-  const backupData: {
-    description: string;
-    type: string;
-    date: string;
-    paymentMethod: string;
-    category: string;
-    amount: string;
-  }[] = [];
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!.trim();
-    if (line) {
-      const values = line.split(',');
-      const [
-        description,
-        type,
-        date,
-        paymentMethod,
-        category,
-        amount,
-      ] = values;
-    
-      const transformedType = type === '0' ? 'expense' : 'income';
-
-      if (
-        description &&
-        type &&
-        date &&
-        paymentMethod &&
-        category &&
-        amount
-      ) {
-
-        const row = {
-          description,
-          type: transformedType,
-          date,
-          paymentMethod,
-          category,
-          amount,
-        };
-        backupData.push(row);
-      }
-    }
-  }
-
-  return backupData;
-};
- 
-const onClickCsvBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        const fileReader = new FileReader();
-        
-        fileReader.onload = () => {
-          const csvString = fileReader.result as string;
-  
-          try {
-            importCsvBackup(importDataFromCsv(csvString))
-            void refetch();
-  
-          } catch (error) {
-            console.log(`Error parsing CSV to JSON: ${error as string}`);
-          }
-        };
-  
-        fileReader.readAsText(file);
-      } catch (error) {
-        console.log(`Error uploading CSV file: ${error as string}`);
-      }
-    }
-  };
 
   const onClickCsvButton = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -254,8 +163,9 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
                     accept=".csv"
                     onChange={(e) => onClickCsvButton(e)}
                   />
-                  Importar csv
+                  Importar fatura XP (CSV)
                 </button>
+                <button className='btn btn-primary btn-outline btn-sm btn-disabled'>Conectar conta Nubank</button>
               </div>
               <div>
                 <DateFilter
@@ -276,23 +186,12 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
             />
           </div>
           <div className="w-1/2">
-            <section className="flex justify-end gap-8 mb-12 ">
+            <section className="flex justify-center gap-8 mb-12 ">
               <ValueCard value={sumExpenses} title="Despesas" backgroundColor="red" />
               <ValueCard value={sumIncome} title="Receitas" backgroundColor="green" />
               <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
             </section>
             <MonthlyChart transactions={transactions ?? []} />
-                  {/* <button
-                  className="btn btn-secondary btn-outline btn-sm"
-                >
-                  <input
-                    className="opacity-0 absolute -left-9999"
-                    type="file"
-                    accept=".csv"
-                    onChange={(e) => onClickCsvBackup(e)}
-                  />
-                  Importar backup
-              </button> */}
           </div>
         </div>
       </div>
