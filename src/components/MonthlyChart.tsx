@@ -1,5 +1,5 @@
-import { type Transaction } from '.prisma/client'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { type Transaction } from '@prisma/client'
 import { Pie } from 'react-chartjs-2'
 
 interface MonthlyChartProps {
@@ -7,22 +7,26 @@ interface MonthlyChartProps {
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend)
+interface CategoryData {
+  [category: string]: number;
+}
 
 const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
-  const categoryData = transactions.reduce((acc, transaction) => {
-    if(transaction.type === 'income') return acc;
-    const { category, amount } = transaction;
+const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
+  if (transaction.type === 'income') return acc;
+  const { category, amount } = transaction;
 
-    if (!acc[category]) {
-      acc[category] = 0;
-    }
+  if (!acc[category]) {
+    acc[category] = 0;
+  }
 
-    acc[category] += amount;
-    return acc;
-  }, {});
+  acc[category] += amount;
+  return acc;
+}, {} as { [key: string]: number }); // Specify the type for categoryData
 
-  const categories = Object.keys(categoryData);
-  const amounts = Object.values(categoryData);
+const categories: string[] = Object.keys(categoryData); // Specify the type for categories
+const amounts: number[] = Object.values(categoryData); // Specify the type for amounts
+
   const colorsArray = [
     '#858bb0',
     '#ff7b7b',
