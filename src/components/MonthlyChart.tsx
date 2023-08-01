@@ -94,7 +94,7 @@ const amounts: number[] = Object.values(categoryData);
     },
   };
 
-  return <div className='h-[30em] w-[30em] ml-52'><Pie data={data} options={options} /></div>
+  return <div className='lg:h-[30em] sm:h-[35em] sm:w-[35em] lg:w-[30em] lg:ml-32 sm:ml-0'><Pie data={data} options={options} /></div>
 }
 
 export default MonthlyChart

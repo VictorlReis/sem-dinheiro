@@ -147,64 +147,65 @@ const convertCsvToJson = (csvString: string): { estabelecimento: string; valor: 
 };
 
   return (
-    <>
-      <div className="h-fit mx-8 my-8">
-        <div className="flex">
-          <div className="w-1/2">
-            <div className="flex justify-between">
-              <div className="flex space-x-4 mb-5">
-                <button
-                  className="btn btn-secondary btn-outline btn-sm"
-                  onClick={() => showModal()}
-                >
-                  Nova transação
-                </button>
-                <button
-                  className="btn btn-secondary btn-outline btn-sm"
-                >
-                  <input
-                    className="opacity-0 absolute -left-9999"
-                    type="file"
-                    accept=".csv"
-                    onChange={(e) => onClickCsvButton(e)}
-                  />
-                  Importar fatura XP (CSV)
-                </button>
-                <button className='btn btn-primary btn-outline btn-sm btn-disabled' onClick={
-                  () => createNubankAccount({login: 'teste', password: 'teste'})
-                }>
-                  Conectar conta Nubank
-                </button>
-              </div>
-              <div>
-                <DateFilter
-                  selectedMonth={month}
-                  selectedYear={year}
-                  onChangeMonth={(e) => {
-                    setMonth(Number(e.target.value))
-                  }}
-                  onChangeYear={(e) => {
-                    setYear(Number(e.target.value))
-                  }}
+<>
+  <div className="container mx-auto px-4 sm:px-8 my-8">
+    <div className="flex flex-col sm:flex-row">
+      <div className="w-full sm:w-1/2 sm:pr-4 lg:mt-0 mt-6 order-2 sm:order-1">
+        <div className="flex flex-col justify-between items-center mb-5 sm:flex-row">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <button
+              className="btn btn-secondary btn-outline btn-sm"
+              onClick={() => showModal()}
+            >
+              Nova transação
+            </button>
+            <div className="hidden sm:block">
+              <button
+                className="btn btn-secondary btn-outline btn-sm"
+              >
+                <input
+                  className="opacity-0 absolute -left-9999"
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => onClickCsvButton(e)}
                 />
-              </div>
+                Importar fatura XP (CSV)
+              </button>
+              <button
+                className="btn btn-primary btn-outline btn-sm btn-disabled"
+                onClick={() => createNubankAccount({ login: 'teste', password: 'teste' })}
+              >
+                Conectar conta Nubank
+              </button>
             </div>
-            <TransactionsTable
-              transactions={transactions ?? []}
-              refetch={refetch}
+          </div>
+          <div className="mt-4 sm:mt-0">
+            <DateFilter
+              selectedMonth={month}
+              selectedYear={year}
+              onChangeMonth={(e) => {
+                setMonth(Number(e.target.value));
+              }}
+              onChangeYear={(e) => {
+                setYear(Number(e.target.value));
+              }}
             />
           </div>
-          <div className="w-1/2">
-            <section className="flex justify-center gap-8 mb-12 ">
-              <ValueCard value={sumExpenses} title="Despesas" backgroundColor="red" />
-              <ValueCard value={sumIncome} title="Receitas" backgroundColor="green" />
-              <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
-            </section>
-            <MonthlyChart transactions={transactions ?? []} />
-          </div>
         </div>
+        <TransactionsTable transactions={transactions ?? []} refetch={refetch} />
       </div>
-      <CreateTransactionModal modalRef={modalRef} refetch={refetch} />
-    </>
+      <div className="w-full sm:w-1/2 sm:pl-4 lg:mt-8 sm:mt-0 order-1 sm:order-2">
+        <section className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
+          <ValueCard value={sumExpenses} title="Despesas" backgroundColor="red" />
+          <ValueCard value={sumIncome} title="Receitas" backgroundColor="green" />
+          <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
+        </section>
+        <MonthlyChart transactions={transactions ?? []} />
+      </div>
+    </div>
+  </div>
+
+  <CreateTransactionModal modalRef={modalRef} refetch={refetch} />
+</>
   )
 }
