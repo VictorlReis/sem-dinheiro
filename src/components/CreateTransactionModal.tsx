@@ -75,7 +75,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 })}
                 type="number"
                 min="0.00"
-                max="10000.00"
+                max="99999.99"
                 step="0.01"
                 placeholder="Valor"
                 className="input input-md input-bordered input-secondary w-36"
