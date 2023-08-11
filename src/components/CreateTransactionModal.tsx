@@ -85,7 +85,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                   setValueAs: (value: string) => new Date(value),
                 })}
                 type="date"
-                value={new Date().toISOString().slice(0, 10)}
+                defaultValue={new Date().toISOString().slice(0, 10)}
                 placeholder="Data"
                 className="input input-md input-bordered input-secondary w-36"
               />
