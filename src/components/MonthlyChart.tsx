@@ -12,20 +12,20 @@ interface CategoryData {
 }
 
 const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
-const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
-  if (transaction.type === 'income') return acc;
-  const { category, amount } = transaction;
+  const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
+    if (transaction.type === 'income') return acc;
+    const { category, amount } = transaction;
 
-  if (!acc[category]) {
-    acc[category] = 0;
-  }
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
 
-  acc[category] += amount;
-  return acc;
-}, {} as { [key: string]: number }); 
+    acc[category] += amount;
+    return acc;
+  }, {} as { [key: string]: number });
 
-const categories: string[] = Object.keys(categoryData); 
-const amounts: number[] = Object.values(categoryData); 
+  const categories: string[] = Object.keys(categoryData);
+  const amounts: number[] = Object.values(categoryData);
 
   const colorsArray = [
     '#858bb0',
@@ -36,12 +36,11 @@ const amounts: number[] = Object.values(categoryData);
     '#924ff2',
     '#ff79c6',
     '#525771',
+    '#910707',
     '#fda648',
-    '#ff79c6',
     '#5914bb',
     '#0ba833',
     '#cd6d08',
-    '#22d0f5',
     '#8f9bc3',
     '#ffa0a0',
     '#ff5555',
@@ -69,7 +68,6 @@ const amounts: number[] = Object.values(categoryData);
     '#6916e0',
     '#491298',
     '#ff5555',
-    '#910707',
   ]
 
   const data = {
