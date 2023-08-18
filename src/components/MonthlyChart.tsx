@@ -8,24 +8,24 @@ interface MonthlyChartProps {
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 interface CategoryData {
-  [category: string]: number;
+  [category: string]: number
 }
 
 const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
   const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
-    if (transaction.type === 'income') return acc;
-    const { category, amount } = transaction;
+    if (transaction.type === 'income') return acc
+    const { category, amount } = transaction
 
     if (!acc[category]) {
-      acc[category] = 0;
+      acc[category] = 0
     }
 
-    acc[category] += amount;
-    return acc;
-  }, {} as { [key: string]: number });
+    acc[category] += amount
+    return acc
+  }, {} as { [key: string]: number })
 
-  const categories: string[] = Object.keys(categoryData);
-  const amounts: number[] = Object.values(categoryData);
+  const categories: string[] = Object.keys(categoryData)
+  const amounts: number[] = Object.values(categoryData)
 
   const colorsArray = [
     '#858bb0',
@@ -88,11 +88,15 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
     maintainAspectRatio: true,
     legend: {
       display: true,
-      position: 'chartArea'
+      position: 'chartArea',
     },
-  };
+  }
 
-  return <div className='lg:h-[30em] sm:h-[35em] sm:w-[35em] lg:w-[30em] lg:ml-32 sm:ml-0'><Pie data={data} options={options} /></div>
+  return (
+    <section className="lg:h-[30em] sm:h-[35em] sm:w-[35em] lg:w-[30em] lg:ml-32 sm:ml-0">
+      <Pie data={data} options={options} />
+    </section>
+  )
 }
 
 export default MonthlyChart

@@ -64,7 +64,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <section className="overflow-x-auto">
       <table className="table table-sm">
         <thead>
           <tr>
@@ -173,6 +173,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   )
 }

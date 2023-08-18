@@ -43,26 +43,24 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
         className="modal-box flex flex-col space-y-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-col items-center">
+        <main className="flex flex-col items-center">
           <header className="mb-4">
             <h1 className="font-bold text-[1.5em]">Nova Transação</h1>
           </header>
-          <div className="flex flex-col items-center space-y-4">
+          <article className="flex flex-col items-center space-y-4">
             <input
               {...register('description')}
               type="text"
               placeholder="Descrição"
               className="input input-md input-bordered input-secondary w-full"
             />
-            <article className="flex space-x-3">
+            <section className="flex space-x-3">
               <input
                 {...register('category')}
                 type="text"
                 placeholder="Categoria"
                 className="input input-md input-bordered input-secondary"
               />
-            </article>
-            <article className="flex space-x-3">
               <input
                 {...register('amount', {
                   setValueAs: (value) => Number(value),
@@ -74,6 +72,8 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 placeholder="Valor"
                 className="input input-md input-bordered input-secondary w-36"
               />
+            </section>
+            <section className="flex space-x-3">
               <input
                 {...register('date', {
                   setValueAs: (value: string) => new Date(value),
@@ -81,19 +81,19 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 type="date"
                 defaultValue={new Date().toISOString().slice(0, 10)}
                 placeholder="Data"
-                className="input input-md input-bordered input-secondary w-36"
+                className="input input-md input-bordered input-secondary w-44"
               />
               <select
                 {...register('type')}
-                className="input input-md input-bordered input-secondary w-34"
+                className="input input-md input-bordered input-secondary w-44"
                 defaultValue="expense"
               >
                 <option value="expense">Saída</option>
                 <option value="income">Entrada</option>
               </select>
-            </article>
-          </div>
-          <div className="modal-action">
+            </section>
+          </article>
+          <footer className="modal-action">
             <button
               className="btn btn-sm btn-outline btn-error"
               onClick={() => {
@@ -109,8 +109,8 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
             >
               Criar
             </button>
-          </div>
-        </div>
+          </footer>
+        </main>
       </form>
     </dialog>
   )

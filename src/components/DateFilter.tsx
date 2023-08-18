@@ -31,7 +31,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
   const startYear = currentYear - 10
 
   return (
-    <div className="flex">
+    <section className="flex">
       <select
         value={selectedMonth}
         onChange={onChangeMonth}
@@ -54,7 +54,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
           </option>
         ))}
       </select>
-    </div>
+    </section>
   )
 }
 

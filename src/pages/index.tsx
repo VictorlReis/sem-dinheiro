@@ -149,18 +149,18 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 sm:px-8 my-8">
-        <div className="flex flex-col sm:flex-row">
-          <div className="w-full sm:w-1/2 sm:pr-4 lg:mt-0 mt-6 order-2 sm:order-1">
-            <div className="flex flex-col justify-between items-center mb-5 sm:flex-row">
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <main className="container mx-auto px-4 sm:px-8 my-8">
+        <article className="flex flex-col sm:flex-row">
+          <article className="w-full sm:w-1/2 sm:pr-4 lg:mt-0 mt-6 order-2 sm:order-1">
+            <section className="flex flex-col justify-between items-center mb-5 sm:flex-row">
+              <section className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <button
                   className="btn btn-secondary btn-outline btn-sm"
                   onClick={() => showModal()}
                 >
                   Nova transação
                 </button>
-                <div className="hidden sm:block">
+                <section className="hidden sm:block">
                   <button className="btn btn-secondary btn-outline btn-sm">
                     <input
                       className="opacity-0 absolute -left-9999"
@@ -170,9 +170,9 @@ const Content: React.FC = () => {
                     />
                     Importar fatura XP (CSV)
                   </button>
-                </div>
-              </div>
-              <div className="mt-4 sm:mt-0">
+                </section>
+              </section>
+              <section className="mt-4 sm:mt-0">
                 <DateFilter
                   selectedMonth={month}
                   selectedYear={year}
@@ -183,15 +183,15 @@ const Content: React.FC = () => {
                     setYear(Number(e.target.value))
                   }}
                 />
-              </div>
-            </div>
+              </section>
+            </section>
             <TransactionsTable
               transactions={transactions ?? []}
               refetch={refetch}
             />
-          </div>
-          <div className="w-full sm:w-1/2 sm:pl-4 lg:mt-8 sm:mt-0 order-1 sm:order-2">
-            <section className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
+          </article>
+          <aside className="w-full sm:w-1/2 sm:pl-4 lg:mt-8 sm:mt-0 order-1 sm:order-2">
+            <article className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
               <ValueCard
                 value={sumExpenses}
                 title="Despesas"
@@ -203,12 +203,11 @@ const Content: React.FC = () => {
                 backgroundColor="green"
               />
               <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
-            </section>
+            </article>
             <MonthlyChart transactions={transactions ?? []} />
-          </div>
-        </div>
-      </div>
-
+          </aside>
+        </article>
+      </main>
       <CreateTransactionModal modalRef={modalRef} refetch={refetch} />
     </>
   )
