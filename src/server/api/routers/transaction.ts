@@ -2,9 +2,8 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { CsvData, createTransactionDto } from '@/dto/transactions.dto'
 
-
 export const transactionRouter = createTRPCRouter({
- importCsv: protectedProcedure
+  importCsv: protectedProcedure
     .input(z.array(CsvData))
     .mutation(async ({ input, ctx }) => {
       const transactions = input.map((row) => {
@@ -15,7 +14,6 @@ export const transactionRouter = createTRPCRouter({
           description: row.estabelecimento,
           type: 'expense',
           date,
-          paymentMethod: 'xp',
           category: 'other',
           amount,
           userId: ctx.session.user.id,
@@ -34,7 +32,6 @@ export const transactionRouter = createTRPCRouter({
           description: input.description,
           type: input.type,
           date: input.date,
-          paymentMethod: input.paymentMethod,
           category: input.category,
           amount: input.amount,
           userId: ctx.session.user.id,
@@ -59,7 +56,6 @@ export const transactionRouter = createTRPCRouter({
         id: z.string(),
         type: z.string(),
         date: z.date(),
-        paymentMethod: z.string(),
         category: z.string(),
         amount: z.number(),
       }),
@@ -73,7 +69,6 @@ export const transactionRouter = createTRPCRouter({
           description: input.description,
           type: input.type,
           date: input.date,
-          paymentMethod: input.paymentMethod,
           category: input.category,
           amount: input.amount,
         },

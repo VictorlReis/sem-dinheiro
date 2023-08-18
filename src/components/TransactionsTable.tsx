@@ -1,10 +1,7 @@
 import { type Transaction } from '@prisma/client'
 import { api } from '@/utils/api'
 import { useState } from 'react'
-import {
-  AiOutlineCloseCircle,
-  AiOutlineCheck,
-} from 'react-icons/ai'
+import { AiOutlineCloseCircle, AiOutlineCheck } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
 
 interface TransactionsTableProps {
@@ -21,7 +18,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   const [selectedType, setSelectedType] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
-  const [paymentMethod, setPaymentMethod] = useState('')
   const [date, setDate] = useState('')
   const [amount, setAmount] = useState<number>(0)
   const [rowBeenEdited, setRowBeenEdited] = useState('')
@@ -44,7 +40,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
     setSelectedType(transaction.type)
     setDescription(transaction.description)
     setCategory(transaction.category)
-    setPaymentMethod(transaction.paymentMethod)
     setAmount(transaction.amount)
     setDate(transaction.date.toISOString().split('T')[0] as string)
   }
@@ -53,14 +48,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
     setRowBeenEdited('')
   }
 
-  const canSave = !!(
-    description &&
-    category &&
-    paymentMethod &&
-    date &&
-    selectedType &&
-    amount
-  )
+  const canSave = !!(description && category && date && selectedType && amount)
 
   const saveEditedRow = (id: string) => {
     if (canSave) {
@@ -68,7 +56,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
         description,
         id,
         category,
-        paymentMethod,
         type: selectedType,
         date: new Date(date),
         amount: amount,
@@ -84,7 +71,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
             <th>Tipo</th>
             <th>Descrição</th>
             <th>Categoria</th>
-            <th>Método</th>
             <th>Data</th>
             <th>Valor</th>
             <th></th>
@@ -131,14 +117,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                   <td>
                     <input
                       className="input input-ghost input-sm w-32"
-                      type="text"
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="input input-ghost input-sm w-32"
                       type="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
@@ -161,7 +139,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                   <td>{trasactionTypeMap[transaction.type]}</td>
                   <td>{transaction.description}</td>
                   <td>{transaction.category}</td>
-                  <td>{transaction.paymentMethod}</td>
                   <td>{transaction.date.toLocaleDateString()}</td>
                   <td>{transaction.amount}</td>
                 </>

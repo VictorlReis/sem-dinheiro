@@ -66,7 +66,6 @@ model Transaction {
     description String
     type String
     date DateTime
-    paymentMethod String
     category String
     amount Float
     userId String

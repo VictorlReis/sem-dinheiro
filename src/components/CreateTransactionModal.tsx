@@ -61,12 +61,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
                 placeholder="Categoria"
                 className="input input-md input-bordered input-secondary"
               />
-              <input
-                {...register('paymentMethod')}
-                type="text"
-                placeholder="Método de pagamento"
-                className="input input-md input-bordered input-secondary w-52"
-              />
             </article>
             <article className="flex space-x-3">
               <input
