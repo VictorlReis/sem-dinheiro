@@ -56,13 +56,6 @@ const Content: React.FC = () => {
     },
   })
 
-  const { mutate: createNubankAccount } =
-    api.nubank.createNubankAccount.useMutation({
-      onSuccess: () => {
-        void refetch()
-      },
-    })
-
   useEffect(() => {
     if (transactions) {
       sumTotal(transactions)

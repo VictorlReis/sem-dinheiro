@@ -30,7 +30,6 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
   const colorsArray = [
     '#858bb0',
     '#ff7b7b',
-    '#44d9f8',
     '#3b425a',
     '#ffb86c',
     '#924ff2',
@@ -44,6 +43,7 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
     '#8f9bc3',
     '#ffa0a0',
     '#ff5555',
+    '#44d9f8',
     '#7886b4',
     '#fd3131',
     '#6272a4',
@@ -51,10 +51,10 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
     '#54628c',
     '#a75a08',
     '#485273',
+    '#491298',
     '#b70707',
     '#6272a4',
     '#565641',
-    '#6d6d4f',
     '#0dbfe5',
     '#fb9325',
     '#0c819a',
@@ -62,12 +62,11 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
     '#0ccd3d',
     '#dd0606',
     '#0a8329',
+    '#6d6d4f',
     '#0ca0bf',
     '#f38107',
     '#824707',
     '#6916e0',
-    '#491298',
-    '#ff5555',
   ]
 
   const data = {
