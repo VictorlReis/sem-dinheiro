@@ -1,7 +1,10 @@
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export const Header = () => {
   const { data: sessionData } = useSession()
+  const router = useRouter()
 
   return (
     <header className="navbar bg-neutral text-neutral-content">
@@ -9,6 +12,24 @@ export const Header = () => {
         {sessionData?.user?.name
           ? `Sem dinheiro, ${sessionData.user.name}?`
           : ''}
+      </section>
+      <section className="gap-2 mr-4">
+        <Link
+          className={`btn btn-neutral btn-sm ${
+            router.pathname === '/' ? 'btn-active' : ''
+          }`}
+          href="/"
+        >
+          Mensal
+        </Link>
+        <Link
+          className={`btn btn-neutral btn-sm ${
+            router.pathname === '/dashboard' ? 'btn-active' : ''
+          }`}
+          href="/dashboard"
+        >
+          Anual
+        </Link>
       </section>
       <section className="flex-none gap-2">
         <article className="dropdown-end dropdown">

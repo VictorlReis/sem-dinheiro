@@ -1,6 +1,5 @@
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import { Header } from '@/components/Header'
 import { type NextPage } from 'next'
 import { api } from '@/utils/api'
 import { useEffect, useRef, useState } from 'react'
@@ -16,13 +15,8 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Sem Dinheiro</title>
-        <meta name="description" content="Sem dinheiro" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <Header />
-        <Content />
-      </main>
+      <Content />
     </>
   )
 }
