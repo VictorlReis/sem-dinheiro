@@ -29,6 +29,7 @@
     "react-hook-form": "^7.45.1",
     "react-icons": "^4.10.1",
     "superjson": "1.12.2",
+    "yahoo-finance2": "^2.4.4",
     "zod": "^3.21.4"
   },
   "devDependencies": {

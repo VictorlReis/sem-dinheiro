@@ -1,9 +1,9 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import { type Transaction } from '@prisma/client'
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 
-interface MonthlyChartProps {
-  transactions: Transaction[]
+interface MonthlyChartProps<T> {
+  data: T[]
+  reducer: (acc: CategoryData, value: T) => CategoryData
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -11,18 +11,14 @@ interface CategoryData {
   [category: string]: number
 }
 
-const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
-  const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
-    if (transaction.type === 'income') return acc
-    const { category, amount } = transaction
-
-    if (!acc[category]) {
-      acc[category] = 0
-    }
-
-    acc[category] += amount
-    return acc
-  }, {} as { [key: string]: number })
+const MonthlyChart: <T>(props: MonthlyChartProps<T>) => JSX.Element = ({
+  data: transactions,
+  reducer,
+}) => {
+  const categoryData: CategoryData = transactions.reduce(
+    reducer,
+    {} as { [key: string]: number },
+  )
 
   const categories: string[] = Object.keys(categoryData)
   const amounts: number[] = Object.values(categoryData)
@@ -92,7 +88,7 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ transactions }) => {
   }
 
   return (
-    <section className="lg:h-[30em] sm:h-[35em] sm:w-[35em] lg:w-[30em] lg:ml-32 sm:ml-0">
+    <section className="sm:ml-0 sm:h-[35em] sm:w-[35em] lg:ml-32 lg:h-[30em] lg:w-[30em]">
       <Pie data={data} options={options} />
     </section>
   )

@@ -13,7 +13,7 @@ export const Header = () => {
           ? `Sem dinheiro, ${sessionData.user.name}?`
           : ''}
       </section>
-      <section className="gap-2 mr-4">
+      <section className="mr-4 gap-2">
         <Link
           className={`btn btn-neutral btn-sm ${
             router.pathname === '/' ? 'btn-active' : ''
@@ -30,13 +30,21 @@ export const Header = () => {
         >
           Anual
         </Link>
+        <Link
+          className={`btn btn-neutral btn-sm ${
+            router.pathname === '/investments' ? 'btn-active' : ''
+          }`}
+          href="/investments"
+        >
+          Investimentos
+        </Link>
       </section>
       <section className="flex-none gap-2">
-        <article className="dropdown-end dropdown">
+        <article className="dropdown dropdown-end">
           {sessionData?.user ? (
             <label
               tabIndex={0}
-              className="btn-ghost btn-circle avatar btn"
+              className="avatar btn btn-circle btn-ghost"
               onClick={() => void signOut()}
             >
               <article className="w-10 rounded-full">
@@ -48,7 +56,7 @@ export const Header = () => {
             </label>
           ) : (
             <button
-              className="btn-ghost rounded-btn btn"
+              className="btn btn-ghost rounded-btn"
               onClick={() => void signIn()}
             >
               Login

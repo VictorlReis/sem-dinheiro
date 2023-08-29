@@ -1,14 +1,12 @@
+import CreateTransactionModal from '@/components/CreateTransactionModal'
+import DateFilter from '@/components/DateFilter'
+import MonthlyChart from '@/components/MonthlyChart'
+import { TransactionsTable } from '@/components/TransactionsTable'
+import { api } from '@/utils/api'
+import { type NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import { type NextPage } from 'next'
-import { api } from '@/utils/api'
-import { useEffect, useRef, useState } from 'react'
-import CreateTransactionModal from '@/components/CreateTransactionModal'
-import { TransactionsTable } from '@/components/TransactionsTable'
-import MonthlyChart from '@/components/MonthlyChart'
-import DateFilter from '@/components/DateFilter'
-import ValueCard from '@/components/ValueCards'
-import { type Transaction } from '@prisma/client'
+import { useRef, useState } from 'react'
 
 const Home: NextPage = () => {
   return (
@@ -30,8 +28,6 @@ const Content: React.FC = () => {
 
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
-  const [sumExpenses, setSumExpenses] = useState(0)
-  const [sumIncome, setSumIncome] = useState(0)
 
   const { data: transactions, refetch } =
     api.transaction.getMonthlyTransactions.useQuery(
@@ -50,28 +46,6 @@ const Content: React.FC = () => {
     },
   })
 
-  useEffect(() => {
-    if (transactions) {
-      sumTotal(transactions)
-    }
-  }, [transactions])
-
-  const sumTotal = (transactions: readonly Transaction[]) => {
-    const { sumExpenses, sumIncome } = transactions.reduce(
-      (sums, transaction) => {
-        if (transaction.type === 'expense') {
-          sums.sumExpenses += transaction.amount
-        } else if (transaction.type === 'income') {
-          sums.sumIncome += transaction.amount
-        }
-        return sums
-      },
-      { sumExpenses: 0, sumIncome: 0 },
-    )
-
-    setSumExpenses(sumExpenses)
-    setSumIncome(sumIncome)
-  }
   const showModal = () => {
     if (modalRef.current) modalRef.current.showModal()
   }
@@ -136,11 +110,11 @@ const Content: React.FC = () => {
 
   return (
     <>
-      <main className="container mx-auto px-4 sm:px-8 my-8">
+      <main className="container mx-auto my-8 px-4 sm:px-8">
         <article className="flex flex-col sm:flex-row">
-          <article className="w-full sm:w-1/2 sm:pr-4 lg:mt-0 mt-6 order-2 sm:order-1">
-            <section className="flex flex-col justify-between items-center mb-5 sm:flex-row">
-              <section className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          <article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
+            <section className="mb-5 flex flex-col items-center justify-between sm:flex-row">
+              <section className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <button
                   className="btn btn-secondary btn-outline btn-sm"
                   onClick={() => showModal()}
@@ -150,7 +124,7 @@ const Content: React.FC = () => {
                 <section className="hidden sm:block">
                   <button className="btn btn-secondary btn-outline btn-sm">
                     <input
-                      className="opacity-0 absolute -left-9999"
+                      className="-left-9999 absolute opacity-0"
                       type="file"
                       accept=".csv"
                       onChange={(e) => onClickCsvButton(e)}
@@ -177,21 +151,21 @@ const Content: React.FC = () => {
               refetch={refetch}
             />
           </article>
-          <aside className="w-full sm:w-1/2 sm:pl-4 lg:mt-8 sm:mt-0 order-1 sm:order-2">
-            <article className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
-              <ValueCard
-                value={sumExpenses}
-                title="Despesas"
-                backgroundColor="red"
-              />
-              <ValueCard
-                value={sumIncome}
-                title="Receitas"
-                backgroundColor="green"
-              />
-              <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
-            </article>
-            <MonthlyChart transactions={transactions ?? []} />
+          <aside className="order-1 w-full sm:order-2 sm:mt-0 sm:w-1/2 sm:pl-4 lg:mt-8">
+            <MonthlyChart
+              data={transactions ?? []}
+              reducer={(acc, transaction) => {
+                if (transaction.type === 'income') return acc
+                const { category, amount } = transaction
+
+                if (!acc[category]) {
+                  acc[category] = 0
+                }
+
+                acc[category] += amount
+                return acc
+              }}
+            />
           </aside>
         </article>
       </main>

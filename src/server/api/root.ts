@@ -1,6 +1,7 @@
-import { createTRPCRouter } from '@/server/api/trpc'
-import { transactionRouter } from '@/server/api/routers/transaction'
 import { nubankRouter } from '@/server/api/routers/nubank'
+import { transactionRouter } from '@/server/api/routers/transaction'
+import { createTRPCRouter } from '@/server/api/trpc'
+import { investmentTransactionRouter } from './routers/investmentTransactions'
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { nubankRouter } from '@/server/api/routers/nubank'
 export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
   nubank: nubankRouter,
+  investmentTransaction: investmentTransactionRouter,
 })
 
 // export type definition of API
