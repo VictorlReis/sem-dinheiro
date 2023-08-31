@@ -79,16 +79,16 @@ export const investmentTransactionRouter = createTRPCRouter({
     WHERE userId = ${ctx.session.user.id}
     GROUP BY stock`
 
-    const result: Portifolio[] = []
+    const uniqueStocks = dbResult.map((res) => res.stock)
+    const marketPricePromises = uniqueStocks.map((stock) =>
+      yahooFinance.quote(`${stock}.SA`),
+    )
+    const marketPrices = await Promise.all(marketPricePromises)
 
-    for (const res of dbResult) {
-      const marketPrice = await yahooFinance.quote(`${res.stock}.SA`)
-
-      result.push({
-        ...res,
-        marketPrice: marketPrice.regularMarketPrice as unknown as number,
-      })
-    }
+    const result = dbResult.map((res, index) => ({
+      ...res,
+      marketPrice: marketPrices[index]!.regularMarketPrice as unknown as number,
+    }))
 
     return result
   }),
