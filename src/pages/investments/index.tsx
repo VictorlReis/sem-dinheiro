@@ -92,7 +92,7 @@ const Content: React.FC = () => {
     const stockIndex = headers.indexOf('Código de Negociação')
     const quantityIndex = headers.indexOf('Quantidade')
 
-    const jsonData: any[] = []
+    const jsonData = []
 
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i]!.trim()
