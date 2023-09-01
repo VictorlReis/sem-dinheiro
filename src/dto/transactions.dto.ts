@@ -38,6 +38,8 @@ export const investmentTransaction = z.object({
   quantity: z.number(),
 })
 
+export type b3csv = z.infer<typeof investmentTransaction>
+
 export const updateInvestmentTransaction = z.object({
   id: z.string().min(1).nonempty(message),
   date: z.date().refine((value) => !isNaN(value.getTime()), {

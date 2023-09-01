@@ -2,6 +2,7 @@ import CreateInvestmentTransactionModal from '@/components/CreateInvestmentTrans
 import MonthlyChart from '@/components/MonthlyChart'
 import { PortifolioTable } from '@/components/PortifolioTable'
 import ValueCard from '@/components/ValueCards'
+import { b3csv } from '@/dto/transactions.dto'
 import { api } from '@/utils/api'
 import { type NextPage } from 'next'
 import Head from 'next/head'
@@ -92,7 +93,7 @@ const Content: React.FC = () => {
     const stockIndex = headers.indexOf('Código de Negociação')
     const quantityIndex = headers.indexOf('Quantidade')
 
-    const jsonData = []
+    const jsonData: b3csv[] = []
 
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i]!.trim()
@@ -113,7 +114,7 @@ const Content: React.FC = () => {
         parseInt(dateParts[1]!) - 1,
         parseInt(dateParts[0]!),
       )
-      const price: number = +values[priceIndex]?.replace('R$', '').trim()! || 0
+      const price = Number(values[priceIndex]?.replace('R$', '')?.trim() || 0)
       const type: string = values[typeIndex]?.trim() || ''
       let stock: string = values[stockIndex]?.trim() || ''
       const quantity: number = +values[quantityIndex]!
