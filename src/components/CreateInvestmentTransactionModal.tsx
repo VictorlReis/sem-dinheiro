@@ -57,7 +57,7 @@ const CreateInvestmentTransactionModal: React.FC<
             <section className="flex space-x-3">
               <input
                 {...register('stock', {
-                  setValueAs: (value) => value.trim().toUpperCase(),
+                  setValueAs: (value: string) => value.trim().toUpperCase(),
                 })}
                 type="text"
                 placeholder="PETR4"
