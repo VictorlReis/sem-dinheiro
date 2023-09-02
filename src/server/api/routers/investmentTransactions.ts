@@ -1,5 +1,5 @@
 import {
-  Portifolio,
+  type Portifolio,
   investmentTransaction,
   updateInvestmentTransaction,
 } from '@/dto/transactions.dto'
@@ -87,7 +87,7 @@ export const investmentTransactionRouter = createTRPCRouter({
 
     const result = dbResult.map((res, index) => ({
       ...res,
-      marketPrice: marketPrices[index]!.regularMarketPrice as unknown as number,
+      marketPrice: marketPrices[index]?.regularMarketPrice as unknown as number,
     }))
 
     return result

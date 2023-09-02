@@ -56,6 +56,7 @@ export const Header = () => {
             </label>
           ) : (
             <button
+              type="button"
               className="btn btn-ghost rounded-btn"
               onClick={() => void signIn()}
             >

@@ -73,7 +73,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
             <th>Categoria</th>
             <th>Data</th>
             <th>Valor</th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>

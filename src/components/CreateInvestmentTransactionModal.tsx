@@ -111,6 +111,7 @@ const CreateInvestmentTransactionModal: React.FC<
           </article>
           <footer className="modal-action">
             <button
+              type="button"
               className="btn btn-error btn-outline btn-sm"
               onClick={() => {
                 props.modalRef.current?.close()

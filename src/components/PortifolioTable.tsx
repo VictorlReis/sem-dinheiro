@@ -1,4 +1,4 @@
-import { Portifolio } from '@/dto/transactions.dto'
+import { type Portifolio } from '@/dto/transactions.dto'
 
 interface PortifolioTableProps {
   positions: Portifolio[]
@@ -28,8 +28,7 @@ export const PortifolioTable: React.FC<PortifolioTableProps> = (props) => {
             <th>Preço Atual</th>
             <th>Rentabilidade</th>
             <th>Alocacao</th>
-
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>

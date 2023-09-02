@@ -89,7 +89,7 @@ const Content: React.FC = () => {
     const jsonData: { estabelecimento: string; valor: string }[] = []
 
     for (let i = 1; i < lines.length; i++) {
-      const line = lines[i]!.trim()
+      const line = lines[i]?.trim()
       if (line) {
         const values = line.split(';')
         const estabelecimento: string = values[estabelecimentoIndex] || ''
@@ -116,13 +116,17 @@ const Content: React.FC = () => {
             <section className="mb-5 flex flex-col items-center justify-between sm:flex-row">
               <section className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <button
+                  type="button"
                   className="btn btn-secondary btn-outline btn-sm"
                   onClick={() => showModal()}
                 >
                   Nova transação
                 </button>
                 <section className="hidden sm:block">
-                  <button className="btn btn-secondary btn-outline btn-sm">
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-outline btn-sm"
+                  >
                     <input
                       className="-left-9999 absolute opacity-0"
                       type="file"
