@@ -108,6 +108,17 @@ const Content: React.FC = () => {
     return jsonData
   }
 
+  const { mutate: getNubankTransactions } =
+    api.nubank.getNubankTransactions.useMutation({
+      onSuccess: () => {
+        void refetch()
+      },
+    })
+
+  function getTransactions(month: number, year: number) {
+    getNubankTransactions({ month, year })
+  }
+
   return (
     <>
       <main className="container mx-auto my-8 px-4 sm:px-8">
@@ -134,6 +145,17 @@ const Content: React.FC = () => {
                       onChange={(e) => onClickCsvButton(e)}
                     />
                     Importar fatura XP (CSV)
+                  </button>
+                  <button
+                    type="button"
+                    disabled
+                    className="btn btn-primary btn-outline btn-sm"
+                    onClick={() => {
+                      console.log('calma')
+                      // getTransactions(month, year)
+                    }}
+                  >
+                    Nubank
                   </button>
                 </section>
               </section>

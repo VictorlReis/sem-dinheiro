@@ -38,6 +38,8 @@ export const investmentTransaction = z.object({
   quantity: z.number(),
 })
 
+export type PythonApiTransaction = z.infer<typeof createTransactionDto>
+
 export type b3csv = z.infer<typeof investmentTransaction>
 
 export const updateInvestmentTransaction = z.object({
