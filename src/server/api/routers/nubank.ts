@@ -11,7 +11,7 @@ export const nubankRouter = createTRPCRouter({
       const pythonUrl = process.env.PYTHON_API_URL || 'http://localhost:8000'
 
       const response = await axios.get(
-        `${pythonUrl}/nubank/get_transactions_mock?year=${year}&month=${month}`,
+        `${pythonUrl}/nubank/get_transactions?year=${year}&month=${month}`,
       )
 
       type apiResponse = {
@@ -23,16 +23,31 @@ export const nubankRouter = createTRPCRouter({
       if (responseData.transactions.length > 0) {
         const transactions: PythonApiTransaction[] = responseData.transactions
         for (const transaction of transactions) {
-          await ctx.prisma.transaction.create({
-            data: {
-              description: transaction.description,
-              type: transaction.type,
-              date: transaction.date,
-              category: transaction.category,
-              amount: transaction.amount, //TODO converter o amount
+          const transactionDate = new Date(transaction.date)
+
+          const existingTransaction = await ctx.prisma.transaction.findFirst({
+            where: {
+              date: transactionDate,
               userId: ctx.session.user.id,
             },
           })
+
+          if (!existingTransaction) {
+            await ctx.prisma.transaction.create({
+              data: {
+                description: transaction.description,
+                type: transaction.type,
+                date: transactionDate,
+                category: transaction.category,
+                amount: transaction.amount / 100.0,
+                userId: ctx.session.user.id,
+              },
+            })
+          } else {
+            console.log(
+              `Transaction with date ${transaction.date.toString()} already exists.`,
+            )
+          }
         }
       }
     }),

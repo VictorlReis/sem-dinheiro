@@ -1,12 +1,14 @@
 import CreateTransactionModal from '@/components/CreateTransactionModal'
 import DateFilter from '@/components/DateFilter'
 import MonthlyChart from '@/components/MonthlyChart'
+import ValueCard from '@/components/ValueCards'
 import { TransactionsTable } from '@/components/TransactionsTable'
 import { api } from '@/utils/api'
 import { type NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { type Transaction } from '@prisma/client'
 
 const Home: NextPage = () => {
   return (
@@ -28,6 +30,8 @@ const Content: React.FC = () => {
 
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
+  const [sumExpenses, setSumExpenses] = useState(0)
+  const [sumIncome, setSumIncome] = useState(0)
 
   const { data: transactions, refetch } =
     api.transaction.getMonthlyTransactions.useQuery(
@@ -45,6 +49,29 @@ const Content: React.FC = () => {
       void refetch()
     },
   })
+
+  useEffect(() => {
+    if (transactions) {
+      sumTotal(transactions)
+    }
+  }, [transactions])
+
+  const sumTotal = (transactions: readonly Transaction[]) => {
+    const { sumExpenses, sumIncome } = transactions.reduce(
+      (sums, transaction) => {
+        if (transaction.type === 'expense') {
+          sums.sumExpenses += transaction.amount
+        } else if (transaction.type === 'income') {
+          sums.sumIncome += transaction.amount
+        }
+        return sums
+      },
+      { sumExpenses: 0, sumIncome: 0 },
+    )
+
+    setSumExpenses(sumExpenses)
+    setSumIncome(sumIncome)
+  }
 
   const showModal = () => {
     if (modalRef.current) modalRef.current.showModal()
@@ -124,8 +151,8 @@ const Content: React.FC = () => {
       <main className="container mx-auto my-8 px-4 sm:px-8">
         <article className="flex flex-col sm:flex-row">
           <article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
-            <section className="mb-5 flex flex-col items-center justify-between sm:flex-row">
-              <section className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+            <section className="mb-5 items-center justify-between sm:flex-row">
+              <section className="flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 mb-5">
                 <button
                   type="button"
                   className="btn btn-secondary btn-outline btn-sm"
@@ -146,20 +173,18 @@ const Content: React.FC = () => {
                     />
                     Importar fatura XP (CSV)
                   </button>
-                  <button
-                    type="button"
-                    disabled
-                    className="btn btn-primary btn-outline btn-sm"
-                    onClick={() => {
-                      console.log('calma')
-                      // getTransactions(month, year)
-                    }}
-                  >
-                    Nubank
-                  </button>
                 </section>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-outline btn-sm"
+                  onClick={() => {
+                    getTransactions(month, year)
+                  }}
+                >
+                  Importar Fatura Nubank
+                </button>
               </section>
-              <section className="mt-4 sm:mt-0">
+              <section className="sm:mt-0 flex flex-row-reverse">
                 <DateFilter
                   selectedMonth={month}
                   selectedYear={year}
@@ -177,7 +202,21 @@ const Content: React.FC = () => {
               refetch={refetch}
             />
           </article>
-          <aside className="order-1 w-full sm:order-2 sm:mt-0 sm:w-1/2 sm:pl-4 lg:mt-8">
+          <aside className="w-full sm:w-1/2 sm:pl-4 sm:mt-0 order-1 sm:order-2">
+            <article className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
+              <ValueCard
+                value={sumExpenses}
+                title="Despesas"
+                backgroundColor="red"
+              />
+              <ValueCard
+                value={sumIncome}
+                title="Receitas"
+                backgroundColor="green"
+              />
+              <ValueCard value={sumIncome - sumExpenses} title="Total Final" />
+            </article>
+
             <MonthlyChart
               data={transactions ?? []}
               reducer={(acc, transaction) => {
