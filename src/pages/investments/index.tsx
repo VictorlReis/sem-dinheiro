@@ -2,7 +2,7 @@ import CreateInvestmentTransactionModal from '@/components/CreateInvestmentTrans
 import MonthlyChart from '@/components/MonthlyChart'
 import { PortifolioTable } from '@/components/PortifolioTable'
 import ValueCard from '@/components/ValueCards'
-import { b3csv } from '@/dto/transactions.dto'
+import { type b3csv } from '@/dto/investiments.dto'
 import { api } from '@/utils/api'
 import { type NextPage } from 'next'
 import Head from 'next/head'

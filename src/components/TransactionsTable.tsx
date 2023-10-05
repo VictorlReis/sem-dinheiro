@@ -64,7 +64,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   }
 
   return (
-    <section className="overflow-x-auto">
+    <section>
       <table className="table table-sm">
         <thead>
           <tr>
@@ -89,7 +89,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                 <>
                   <td>
                     <select
-                      className="input input-ghost input-sm w-20"
+                      className="input input-ghost input-sm w-24"
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
                     >
@@ -124,7 +124,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                   </td>
                   <td>
                     <input
-                      className="input input-ghost input-sm w-20"
+                      className="input input-ghost input-sm w-24"
                       type="number"
                       min="0.00"
                       max="10000.00"

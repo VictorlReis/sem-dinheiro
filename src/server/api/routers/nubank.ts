@@ -28,6 +28,7 @@ export const nubankRouter = createTRPCRouter({
           const existingTransaction = await ctx.prisma.transaction.findFirst({
             where: {
               date: transactionDate,
+              amount: transaction.amount / 100.0,
               userId: ctx.session.user.id,
             },
           })
