@@ -2,6 +2,7 @@ import { type Transaction } from '@prisma/client'
 import { api } from '@/utils/api'
 import { useState } from 'react'
 import { AiOutlineCloseCircle, AiOutlineCheck } from 'react-icons/ai'
+import { TbMath1Divide2 } from "react-icons/tb";
 import { MdDelete } from 'react-icons/md'
 
 interface TransactionsTableProps {
@@ -62,6 +63,20 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
       })
     }
   }
+
+  const handleDivideAndCopy = () => {
+    const newAmount = amount / 2;
+
+    const newAmountString = newAmount.toString();
+
+    navigator.clipboard.writeText(newAmountString)
+      .then(() => {
+        setAmount(newAmount);
+      })
+      .catch(err => {
+        console.error('Erro ao copiar para a área de transferência:', err);
+      });
+  };
 
   return (
     <section>
@@ -158,6 +173,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                       className="text-accent"
                     >
                       <AiOutlineCloseCircle size={20} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleDivideAndCopy();
+                      }}
+                    >
+                      <TbMath1Divide2 size={20} />
                     </button>
                   </div>
                 ) : (
