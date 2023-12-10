@@ -64,7 +64,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
     }
   }
 
-  const handleDivideAndCopy = () => {
+  const handleSplitButton = () => {
     const newAmount = amount / 2;
 
     const newAmountString = newAmount.toString();
@@ -176,7 +176,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
                     </button>
                     <button
                       onClick={() => {
-                        handleDivideAndCopy();
+                        handleSplitButton();
                       }}
                     >
                       <TbMath1Divide2 size={20} />

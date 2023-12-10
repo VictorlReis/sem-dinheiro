@@ -36,12 +36,19 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
     reset()
     props.modalRef.current?.close()
   }
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      await handleSubmit(onSubmit)();
+    }
+  };
 
   return (
     <dialog id="create_modal" className="modal" ref={props.modalRef}>
       <form
         className="modal-box flex flex-col space-y-4"
         onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={handleKeyDown}
       >
         <main className="flex flex-col items-center">
           <header className="mb-4">
