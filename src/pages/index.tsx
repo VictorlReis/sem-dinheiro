@@ -1,14 +1,14 @@
 import CreateTransactionModal from '@/components/CreateTransactionModal'
 import DateFilter from '@/components/DateFilter'
 import MonthlyChart from '@/components/MonthlyChart'
-import ValueCard from '@/components/ValueCards'
 import { TransactionsTable } from '@/components/TransactionsTable'
+import ValueCard from '@/components/ValueCards'
 import { api } from '@/utils/api'
+import { type Transaction } from '@prisma/client'
 import { type NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
-import { type Transaction } from '@prisma/client'
 
 const Home: NextPage = () => {
   return (
