@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react'
 import { Header } from './Header'
+import { ThemeProvider } from './theme-provider'
 
 interface LayoutProps {
   children: ReactNode
@@ -8,8 +9,14 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <>
-      <Header />
-      <main>{children}</main>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <main>{children}</main>
+      </ThemeProvider>
     </>
   )
 }

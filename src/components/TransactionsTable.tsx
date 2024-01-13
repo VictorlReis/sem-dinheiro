@@ -161,34 +161,34 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
               <td>
                 {rowBeenEdited === transaction.id ? (
                   <div className="flex gap-2">
-                    <button
+                    <Button
                       onClick={() => saveEditedRow(transaction.id)}
                       className="text-success"
                       disabled={!canSave}
                     >
                       <AiOutlineCheck size={20} />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => cancelEdit()}
                       className="text-accent"
                     >
                       <AiOutlineCloseCircle size={20} />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => {
                         handleSplitButton();
                       }}
                     >
                       <TbMath1Divide2 size={20} />
-                    </button>
+                    </Button>
                   </div>
                 ) : (
-                  <button
+                  <Button
                     className="text-error ml-2"
                     onClick={() => deleteTransaction({ id: transaction.id })}
                   >
                     <MdDelete size={20} />
-                  </button>
+                  </Button>
                 )}
               </td>
             </tr>

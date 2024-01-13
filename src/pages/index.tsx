@@ -1,13 +1,17 @@
 import CreateTransactionModal from '@/components/CreateTransactionModal'
 import DateFilter from '@/components/DateFilter'
+import { Header } from '@/components/Header'
 import MonthlyChart from '@/components/MonthlyChart'
 import { TransactionsTable } from '@/components/TransactionsTable'
 import ValueCard from '@/components/ValueCards'
+import { ModeToggle } from '@/components/mode-toggle'
+import { Button } from '@/components/ui/Button'
 import { api } from '@/utils/api'
 import { type Transaction } from '@prisma/client'
 import { type NextPage } from 'next'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 const Home: NextPage = () => {
@@ -146,24 +150,40 @@ const Content: React.FC = () => {
     getNubankTransactions({ month, year })
   }
 
+  if (!sessionData?.user) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-4xl text-center">
+          Sem Dinheiro
+        </h1>
+        <div className='mt-4'>
+          <Button onClick={() => void signIn()}>Login</Button>
+        </div>
+        <div className='mt-4'>
+          <ModeToggle />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
+      <Header />
+      <hr className="border-gray-700" />
       <main className="container mx-auto my-8 px-4 sm:px-8">
         <article className="flex flex-col sm:flex-row">
           <article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
             <section className="mb-5 items-center justify-between sm:flex-row">
               <section className="flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 mb-5">
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-outline btn-sm"
+                <Button
+                  variant="secondary"
                   onClick={() => showModal()}
                 >
                   Nova transação
-                </button>
+                </Button>
                 <section className="hidden sm:block">
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-outline btn-sm"
+                  <Button
+                    variant="secondary"
                   >
                     <input
                       className="-left-9999 absolute opacity-0"
@@ -172,17 +192,17 @@ const Content: React.FC = () => {
                       onChange={(e) => onClickCsvButton(e)}
                     />
                     Importar fatura XP (CSV)
-                  </button>
+                  </Button>
                 </section>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-outline btn-sm"
+                <Button
+                  type="Button"
+                  variant="secondary"
                   onClick={() => {
                     getTransactions(month, year)
                   }}
                 >
                   Importar Fatura Nubank
-                </button>
+                </Button>
               </section>
               <section className="sm:mt-0 flex flex-row-reverse">
                 <DateFilter

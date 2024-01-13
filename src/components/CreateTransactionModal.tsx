@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '@/utils/api'
 import { createTransactionDto } from '@/dto/transactions.dto'
+import { Button } from './ui/Button'
 
 interface CreateTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>
@@ -101,22 +102,21 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
             </section>
           </article>
           <footer className="modal-action">
-            <button
-              type="button"
+            <Button
               className="btn btn-sm btn-outline btn-error"
               onClick={() => {
                 props.modalRef.current?.close()
               }}
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className="btn btn-sm btn-outline btn-success"
               disabled={isSubmitting}
             >
               Criar
-            </button>
+            </Button>
           </footer>
         </main>
       </form>

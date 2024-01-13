@@ -143,16 +143,16 @@ const Content: React.FC = () => {
           <article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
             <section className="mb-5 flex flex-col items-center justify-between sm:flex-row">
               <section className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <button
-                  type="button"
+                <Button
+                  type="Button"
                   className="btn btn-secondary btn-outline btn-sm"
                   onClick={() => showModal()}
                 >
                   Nova compra
-                </button>
+                </Button>
                 <section className="hidden sm:block">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button"
                     className="btn btn-secondary btn-outline btn-sm"
                   >
                     <input
@@ -162,7 +162,7 @@ const Content: React.FC = () => {
                       onChange={(e) => onClickCsvButton(e)}
                     />
                     Importar posiçao da B3 (CSV)
-                  </button>
+                  </Button>
                 </section>
               </section>
             </section>
