@@ -110,22 +110,22 @@ const CreateInvestmentTransactionModal: React.FC<
             </section>
           </article>
           <footer className="modal-action">
-            <button
-              type="button"
+            <Button
+              type="Button"
               className="btn btn-error btn-outline btn-sm"
               onClick={() => {
                 props.modalRef.current?.close()
               }}
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className="btn btn-success btn-outline btn-sm"
               disabled={isSubmitting}
             >
               Criar
-            </button>
+            </Button>
           </footer>
         </main>
       </form>
