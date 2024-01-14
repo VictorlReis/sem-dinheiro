@@ -1,7 +1,7 @@
 import CreateTransactionModal from "@/components/CreateTransactionModal";
 import DateFilter from "@/components/DateFilter";
 import MonthlyChart from "@/components/MonthlyChart";
-import { TransactionsTable } from "@/components/TransactionsTable";
+import { TransactionsTable } from "@/components/transactions/DataTable";
 import { Button } from "@/components/ui/Button";
 import {
 	Card,
