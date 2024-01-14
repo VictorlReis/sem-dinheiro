@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '@/utils/api'
 import { createTransactionDto } from '@/dto/transactions.dto'
-import { Button } from './ui/Button'
+import { Button } from '@/components/ui/Button'
 
 interface CreateTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>

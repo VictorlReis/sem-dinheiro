@@ -3,6 +3,7 @@ import { api } from '@/utils/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { type z } from 'zod'
+import { Button } from '@/components/ui/Button'
 
 interface CreateInvestmentTransactionModalProps {
   modalRef: React.RefObject<HTMLDialogElement>
@@ -111,7 +112,6 @@ const CreateInvestmentTransactionModal: React.FC<
           </article>
           <footer className="modal-action">
             <Button
-              type="Button"
               className="btn btn-error btn-outline btn-sm"
               onClick={() => {
                 props.modalRef.current?.close()

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { AiOutlineCloseCircle, AiOutlineCheck } from 'react-icons/ai'
 import { TbMath1Divide2 } from "react-icons/tb";
 import { MdDelete } from 'react-icons/md'
+import { Button } from '@/components/ui/Button'
 
 interface TransactionsTableProps {
   transactions: Transaction[]
