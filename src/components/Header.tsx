@@ -2,7 +2,9 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { ModeToggle } from './mode-toggle'
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
-import { Button } from './ui/Button'
+import { Button } from '@/components/ui/Button'
+import { navigationMenuTriggerStyle, NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from './ui/navigation-menu'
+
 export const Header = () => {
   const { data: sessionData } = useSession()
 
@@ -22,34 +24,40 @@ export const Header = () => {
             Login
           </Button>
         )}
-        {sessionData?.user?.name
-          ? `Sem dinheiro, ${sessionData.user.name}?`
-          : ''}
+        <article className='mt-3'>
+          {sessionData?.user?.name
+            ? `Sem dinheiro, ${sessionData.user.name}?`
+            : ''}
+        </article>
       </section>
       <section className='flex flex-row gap-2'>
-        <Button variant="secondary" asChild>
-          <Link
-            href="/"
-          >
-            Mensal
-          </Link>
-        </Button>
-        <Button variant="secondary" asChild>
-          <Link
-            href="/dashboard"
-          >
-            Anual
-          </Link>
-        </Button>
-        <Button variant="secondary" asChild>
-          <Link
-            href="/investments"
-          >
-            Investimentos
-          </Link>
-        </Button>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Mensal
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/dashboard" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Anual
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/investments" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Investimentos
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
         <ModeToggle />
       </section>
-    </header>
+    </header >
   )
 }

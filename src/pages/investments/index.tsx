@@ -2,6 +2,7 @@ import CreateInvestmentTransactionModal from '@/components/CreateInvestmentTrans
 import MonthlyChart from '@/components/MonthlyChart'
 import { PortifolioTable } from '@/components/PortifolioTable'
 import ValueCard from '@/components/ValueCards'
+import { Button } from '@/components/ui/Button'
 import { type b3csv } from '@/dto/investiments.dto'
 import { api } from '@/utils/api'
 import { type NextPage } from 'next'
@@ -144,7 +145,6 @@ const Content: React.FC = () => {
             <section className="mb-5 flex flex-col items-center justify-between sm:flex-row">
               <section className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <Button
-                  type="Button"
                   className="btn btn-secondary btn-outline btn-sm"
                   onClick={() => showModal()}
                 >
@@ -152,7 +152,6 @@ const Content: React.FC = () => {
                 </Button>
                 <section className="hidden sm:block">
                   <Button
-                    type="Button"
                     className="btn btn-secondary btn-outline btn-sm"
                   >
                     <input
@@ -181,11 +180,9 @@ const Content: React.FC = () => {
               data={positions ?? []}
               reducer={(acc, position) => {
                 const { stock, marketPrice, quantity } = position
-
                 if (!acc[stock]) {
                   acc[stock] = 0
                 }
-
                 acc[stock] += ((marketPrice * quantity) / sumPortifolio) * 100
                 return acc
               }}
