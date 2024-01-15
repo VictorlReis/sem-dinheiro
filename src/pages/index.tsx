@@ -189,12 +189,8 @@ const Content: React.FC = () => {
 								<DateFilter
 									selectedMonth={month}
 									selectedYear={year}
-									onChangeMonth={(e) => {
-										setMonth(Number(e.target.value));
-									}}
-									onChangeYear={(e) => {
-										setYear(Number(e.target.value));
-									}}
+									onChangeMonth={(value: string) => setMonth(Number(value))}
+									onChangeYear={(value: string) => setYear(Number(value))}
 								/>
 							</section>
 						</section>
