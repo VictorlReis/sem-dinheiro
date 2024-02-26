@@ -11,7 +11,7 @@ import {
   FormField,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/Input'
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -28,7 +28,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/Select'
+} from '@/components/ui/select'
 
 interface CreateTransactionModalProps {
   refetch: () => void
