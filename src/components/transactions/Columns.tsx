@@ -43,7 +43,9 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('type')}</div>,
+    cell: ({ row }) => (
+      <div>{row.getValue('type') === 'expense' ? 'Saida' : 'Entrada'}</div>
+    ),
   },
   {
     accessorKey: 'description',
@@ -60,6 +62,23 @@ export const columns: ColumnDef<Transaction>[] = [
     },
     cell: ({ row }) => (
       <div className="lowercase">{row.getValue('description')}</div>
+    ),
+  },
+  {
+    accessorKey: 'category',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Categoria
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('category')}</div>
     ),
   },
   {
