@@ -31,6 +31,7 @@ import {
 import { Transaction } from '@prisma/client'
 import { DataTablePagination } from './DataTablePagination'
 import { columns } from './Columns'
+import { Input } from '../ui/input'
 
 interface TransactionsTableProps {
   transactions: Transaction[]
