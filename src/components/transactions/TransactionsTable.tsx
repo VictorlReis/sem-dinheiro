@@ -19,8 +19,8 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/DropDownMenu'
-import { Input } from '@/components/ui/Input'
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -28,7 +28,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table'
+} from '@/components/ui/table'
 import { Transaction } from '@prisma/client'
 import { DataTablePagination } from './DataTablePagination'
 import { columns } from './Columns'
