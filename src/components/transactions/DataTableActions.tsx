@@ -55,7 +55,7 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
         <DropdownMenuItem>
           <Button
             variant="link"
-            onClick={(event) => {
+            onClick={() => {
               console.log('editar')
             }}
           >
