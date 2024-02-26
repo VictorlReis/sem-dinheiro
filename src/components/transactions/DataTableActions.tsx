@@ -39,9 +39,7 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem>
-          <Button variant="link" onClick={(event) => {}}>
-            Editar
-          </Button>
+          <Button variant="link">Editar</Button>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Button
