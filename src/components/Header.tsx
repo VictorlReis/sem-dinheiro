@@ -9,7 +9,7 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from './ui/NavigationMenu'
+} from './ui/navigation-menu'
 
 export const Header = () => {
   const { data: sessionData } = useSession()

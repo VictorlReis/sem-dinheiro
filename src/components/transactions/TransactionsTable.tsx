@@ -20,7 +20,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -69,7 +68,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
+        <input.Input
           placeholder="Filtrar pela descricao"
           value={
             (table.getColumn('description')?.getFilterValue() as string) ?? ''
