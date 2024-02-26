@@ -18,9 +18,14 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
-import { CalendarIcon, Link } from 'lucide-react'
+import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
-import { Dialog, DialogContent, DialogFooter, DialogHeader } from './ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+} from '@/components/ui/dialog'
 import { DialogClose, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog'
 import {
   Select,
@@ -30,11 +35,11 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-interface CreateTransactionModalProps {
+interface CreateTransactionDialogProps {
   refetch: () => void
 }
 
-const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
+const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
   props,
 ) => {
   const form = useForm<z.infer<typeof createTransactionDto>>({
@@ -193,4 +198,4 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
   )
 }
 
-export default CreateTransactionModal
+export default CreateTransactionDialog
