@@ -47,7 +47,7 @@ export const transactionRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ input, ctx }) => {
       const openai = new OpenAI({
-        apiKey: '',
+        apiKey: process.env.OPENAIKEY,
       })
 
       const prompt = `Interpret the entered data delimited by triple quotes and transform it into JSON with the following key/value properties: { "description": string; "value": int; }
@@ -66,7 +66,7 @@ Input: Data;Estabelecimento;Portador;Valor;Parcela
 18/02/2024;Uno   *Noy   *TRIP;VICTOR REIS;R$ 14,88;-
 29/01/2024;MYPASS;VICTOR REIS;R$ 89,90;-
 Output: [{"description": "IFD*IFOOD.COM", "value": 4.95}, {"description": "ybe *ybe *trip", "value": 14.88},  {"description": "TOTALPASS", "value": 89.90}
-The output should not contains spaces or \\n, it should be a valid JSON or array of JSONs.
+The output should not contains spaces or \\n, it should be an array of JSONs.
 """${input}"""`
 
       const response = await openai.chat.completions.create({
