@@ -68,7 +68,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <input.Input
+        <Input
           placeholder="Filtrar pela descricao"
           value={
             (table.getColumn('description')?.getFilterValue() as string) ?? ''
