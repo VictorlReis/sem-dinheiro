@@ -38,6 +38,11 @@ export const transactionRouter = createTRPCRouter({
         },
       })
     }),
+  insertMany: protectedProcedure
+    .input(z.array(createTransactionDto))
+    .mutation(({ input, ctx }) => {
+      console.log(input)
+    }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
