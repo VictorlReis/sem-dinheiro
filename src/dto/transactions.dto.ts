@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-const message = 'Campo não pode ser vazio'
 export const createTransactionDto = z
   .object({
     description: z.string().min(1),
@@ -28,6 +27,11 @@ export const investmentTransaction = z.object({
   type: z.string().min(1),
   stock: z.string().min(1),
   quantity: z.number(),
+})
+
+export const insertTransaction = z.object({
+  description: z.string().min(1),
+  value: z.number().min(0.01),
 })
 
 export type PythonApiTransaction = z.infer<typeof createTransactionDto>
