@@ -1,7 +1,7 @@
-import CreateTransactionModal from "@/components/CreateTransactionModal";
+import CreateTransaction from "@/components/CreateTransaction";
 import DateFilter from "@/components/DateFilter";
 import MonthlyChart from "@/components/MonthlyChart";
-import { TransactionsTable } from "@/components/transactions/DataTable";
+import { TransactionsTable } from "@/components/transactions/TransactionsTable";
 import { Button } from "@/components/ui/Button";
 import {
 	Card,
@@ -161,10 +161,8 @@ const Content: React.FC = () => {
 				<article className="flex flex-col sm:flex-row">
 					<article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
 						<section className="mb-5 items-center justify-between sm:flex-row">
-							<section className="flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 mb-5">
-								<Button variant="default" onClick={() => showModal()}>
-									Nova transação
-								</Button>
+							<section className="mb-5 flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+								<CreateTransaction refetch={refetch} />
 								<section className="hidden sm:block">
 									<Button variant="secondary">
 										<input
@@ -185,7 +183,7 @@ const Content: React.FC = () => {
 									Importar Fatura Nubank
 								</Button>
 							</section>
-							<section className="sm:mt-0 flex flex-row-reverse">
+							<section className="flex flex-row-reverse sm:mt-0">
 								<DateFilter
 									selectedMonth={month}
 									selectedYear={year}
@@ -199,8 +197,8 @@ const Content: React.FC = () => {
 							refetch={refetch}
 						/>
 					</article>
-					<aside className="w-full sm:w-1/2 sm:pl-4 sm:mt-0 order-1 sm:order-2">
-						<article className="flex flex-col sm:flex-row justify-center gap-8 mb-12">
+					<aside className="order-1 w-full sm:order-2 sm:mt-0 sm:w-1/2 sm:pl-4">
+						<article className="mb-12 flex flex-col justify-center gap-8 sm:flex-row">
 							<Card>
 								<CardHeader>
 									<CardDescription>Despesas</CardDescription>
@@ -235,7 +233,6 @@ const Content: React.FC = () => {
 								</CardHeader>
 							</Card>
 						</article>
-
 						<MonthlyChart
 							data={transactions ?? []}
 							reducer={(acc, transaction) => {
@@ -253,7 +250,6 @@ const Content: React.FC = () => {
 					</aside>
 				</article>
 			</main>
-			<CreateTransactionModal modalRef={modalRef} refetch={refetch} />
 		</>
 	);
 };

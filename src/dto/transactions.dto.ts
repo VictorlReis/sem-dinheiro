@@ -3,10 +3,12 @@ import { z } from 'zod'
 const message = 'Campo não pode ser vazio'
 export const createTransactionDto = z
   .object({
-    description: z.string().min(1).nonempty(message),
-    category: z.string().min(1).nonempty(message),
-    type: z.string().min(1).nonempty(message),
-    amount: z.number().min(0.01),
+    description: z.string().min(1),
+    category: z.string().min(1),
+    type: z.string().min(1),
+    amount: z.number().min(0.01, {
+      message: 'Error',
+    }),
     date: z.date().refine((value) => !isNaN(value.getTime()), {
       message: 'Data inválida',
     }),
@@ -18,23 +20,13 @@ export const CsvData = z.object({
   valor: z.string(),
 })
 
-export const createTransactionBackup = z
-  .object({
-    description: z.string(),
-    category: z.string(),
-    type: z.string(),
-    amount: z.string(),
-    date: z.string(),
-  })
-  .required()
-
 export const investmentTransaction = z.object({
   date: z.date().refine((value) => !isNaN(value.getTime()), {
     message: 'Data inválida',
   }),
   price: z.number(),
-  type: z.string().min(1).nonempty(message),
-  stock: z.string().min(1).nonempty(message),
+  type: z.string().min(1),
+  stock: z.string().min(1),
   quantity: z.number(),
 })
 
@@ -43,18 +35,14 @@ export type PythonApiTransaction = z.infer<typeof createTransactionDto>
 export type b3csv = z.infer<typeof investmentTransaction>
 
 export const updateInvestmentTransaction = z.object({
-  id: z.string().min(1).nonempty(message),
+  id: z.string().min(1),
   date: z.date().refine((value) => !isNaN(value.getTime()), {
     message: 'Data inválida',
   }),
   price: z.number(),
-  type: z.string().min(1).nonempty(message),
-  stock: z.string().min(1).nonempty(message),
+  type: z.string().min(1),
+  stock: z.string().min(1),
   quantity: z.number(),
-})
-
-export const getStockData = z.object({
-  stock: z.string().min(1).nonempty(message),
 })
 
 export interface Portifolio {
