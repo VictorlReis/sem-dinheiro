@@ -16,8 +16,8 @@ interface DataTableActionsProps {
 export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
   const utils = api.useUtils()
   const { mutate: deleteTransaction } = api.transaction.delete.useMutation({
-    onSuccess: () => {
-      utils.transaction.invalidate()
+    onSuccess: async () => {
+      await utils.transaction.invalidate()
     },
   })
 

@@ -58,12 +58,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = (
     createTransaction(values)
     form.reset()
   }
-  const handleKeyDown = async (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      form.handleSubmit(onSubmit)
-    }
-  }
 
   return (
     <Dialog>
