@@ -48,7 +48,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
 				</SelectTrigger>
 				<SelectContent>
 					{translatedMonths.map((mes, index) => (
-						<SelectItem value={(index + 1).toString()}>{mes}</SelectItem>
+						<SelectItem key={mes} value={(index + 1).toString()}>{mes}</SelectItem>
 					))}
 				</SelectContent>
 			</Select>
@@ -61,7 +61,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
 				</SelectTrigger>
 				<SelectContent>
 					{Array.from({ length: 11 }, (_, i) => startYear + i).map((year) => (
-						<SelectItem value={year.toString()}>{year}</SelectItem>
+						<SelectItem key={year} value={year.toString()}>{year}</SelectItem>
 					))}
 				</SelectContent>
 			</Select>
