@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
-import { Button } from '../ui/Button'
+import { Button } from '@/components/ui/button'
 import { api } from '@/utils/api'
 
 interface DataTableActionsProps {
