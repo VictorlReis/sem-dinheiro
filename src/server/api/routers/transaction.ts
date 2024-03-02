@@ -4,32 +4,10 @@ import {
   CsvData,
   createTransactionDto,
   insertInputDto,
-  insertTransaction,
 } from '@/dto/transactions.dto'
 import OpenAI from 'openai'
 
 export const transactionRouter = createTRPCRouter({
-  importCsv: protectedProcedure
-    .input(z.array(CsvData))
-    .mutation(async ({ input, ctx }) => {
-      const transactions = input.map((row) => {
-        const date = new Date()
-        const amount = parseFloat(row.valor.replace('R$', '').replace(',', '.'))
-
-        return {
-          description: row.estabelecimento,
-          type: 'expense',
-          date,
-          category: 'other',
-          amount,
-          userId: ctx.session.user.id,
-        }
-      })
-
-      return ctx.prisma.transaction.createMany({
-        data: transactions,
-      })
-    }),
   create: protectedProcedure
     .input(createTransactionDto)
     .mutation(({ input, ctx }) => {

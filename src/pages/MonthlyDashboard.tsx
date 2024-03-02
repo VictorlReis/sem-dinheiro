@@ -35,12 +35,6 @@ const MonthlyDashboard: React.FC = () => {
       },
     )
 
-  const { mutate: importCsv } = api.transaction.importCsv.useMutation({
-    onSuccess: () => {
-      void refetch()
-    },
-  })
-
   useEffect(() => {
     if (transactions) {
       sumTotal(transactions)
@@ -65,75 +59,6 @@ const MonthlyDashboard: React.FC = () => {
     setTotal(sumIncome - sumExpenses)
   }
 
-  const onClickCsvButton = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      try {
-        const fileReader = new FileReader()
-
-        fileReader.onload = () => {
-          const csvString = fileReader.result as string
-
-          try {
-            importCsv(convertCsvToJson(csvString))
-            void refetch()
-          } catch (error) {
-            console.log(`Error parsing CSV to JSON: ${error as string}`)
-          }
-        }
-
-        fileReader.readAsText(file)
-      } catch (error) {
-        console.log(`Error uploading CSV file: ${error as string}`)
-      }
-    }
-  }
-
-  const convertCsvToJson = (
-    csvString: string,
-  ): { estabelecimento: string; valor: string }[] => {
-    const lines: string[] = csvString.split('\n')
-
-    if (lines.length < 2) throw new Error('Invalid CSV format')
-    if (!lines[0]) throw new Error('Invalid CSV format')
-
-    const headers = lines[0].split(';')
-    const estabelecimentoIndex = headers.indexOf('Estabelecimento')
-    const valorIndex = headers.indexOf('Valor')
-
-    const jsonData: { estabelecimento: string; valor: string }[] = []
-
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i]?.trim()
-      if (line) {
-        const values = line.split(';')
-        const estabelecimento: string = values[estabelecimentoIndex] || ''
-        const valor: string = values[valorIndex] || ''
-
-        if (estabelecimento && valor) {
-          const row = {
-            estabelecimento,
-            valor,
-          }
-          jsonData.push(row)
-        }
-      }
-    }
-
-    return jsonData
-  }
-
-  const { mutate: getNubankTransactions } =
-    api.nubank.getNubankTransactions.useMutation({
-      onSuccess: () => {
-        void refetch()
-      },
-    })
-
-  function getTransactions(month: number, year: number) {
-    getNubankTransactions({ month, year })
-  }
-
   return (
     <>
       <hr className="border-gray-700" />
@@ -144,25 +69,6 @@ const MonthlyDashboard: React.FC = () => {
               <section className="mb-5 flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <CreateTransactionDialog refetch={refetch} />
                 <TransactionsInsertAiDialog refetch={refetch} />
-                <section className="hidden sm:block">
-                  <Button variant="secondary">
-                    <input
-                      className="-left-9999 absolute opacity-0"
-                      type="file"
-                      accept=".csv"
-                      onChange={(e) => onClickCsvButton(e)}
-                    />
-                    Importar fatura XP (CSV)
-                  </Button>
-                </section>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    getTransactions(month, year)
-                  }}
-                >
-                  Importar Fatura Nubank
-                </Button>
               </section>
               <section className="flex flex-row-reverse sm:mt-0">
                 <DateFilter

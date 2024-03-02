@@ -1,7 +1,7 @@
-import { nubankRouter } from '@/server/api/routers/nubank'
 import { transactionRouter } from '@/server/api/routers/transaction'
 import { createTRPCRouter } from '@/server/api/trpc'
 import { investmentTransactionRouter } from './routers/investmentTransactions'
+import { investmentTransaction } from '../../dto/investiments.dto'
 
 /**
  * This is the primary router for your server.
@@ -10,7 +10,6 @@ import { investmentTransactionRouter } from './routers/investmentTransactions'
  */
 export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
-  nubank: nubankRouter,
   investmentTransaction: investmentTransactionRouter,
 })
 
