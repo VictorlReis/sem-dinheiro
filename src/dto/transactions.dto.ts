@@ -19,6 +19,13 @@ export const CsvData = z.object({
   valor: z.string(),
 })
 
+export const insertInputDto = z.object({
+  date: z.date().refine((value) => !isNaN(value.getTime()), {
+    message: 'Data inválida',
+  }),
+  data: z.string().min(1),
+})
+
 export const investmentTransaction = z.object({
   date: z.date().refine((value) => !isNaN(value.getTime()), {
     message: 'Data inválida',
