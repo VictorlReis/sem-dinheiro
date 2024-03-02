@@ -34,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import MoneyInput from '../ui/moneyInput'
 
 interface CreateTransactionDialogProps {
   refetch: () => void
@@ -48,7 +49,7 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
       description: '',
       category: '',
       type: 'expense',
-      amount: 1,
+      amount: 0,
       date: new Date(),
     },
   })
@@ -60,6 +61,7 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
   })
 
   const onSubmit = (values: z.infer<typeof createTransactionDto>) => {
+    console.log(values)
     createTransaction(values)
     form.reset()
   }
@@ -102,25 +104,7 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
               />
             </section>
             <section className="flex space-x-3 mb-4 justify-center w-96">
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min="0.00"
-                        max="9999.99"
-                        step="0.01"
-                        placeholder="Valor"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <MoneyInput form={form} name="amount" placeholder="Valor" />
               <FormField
                 control={form.control}
                 name="date"

@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import {
   CsvData,
   createTransactionDto,
+  insertInputDto,
   insertTransaction,
 } from '@/dto/transactions.dto'
 import OpenAI from 'openai'
@@ -44,7 +45,7 @@ export const transactionRouter = createTRPCRouter({
       })
     }),
   insertWithAi: protectedProcedure
-    .input(z.string())
+    .input(insertInputDto)
     .mutation(async ({ input, ctx }) => {
       const openai = new OpenAI({
         apiKey: process.env.OPENAIKEY,
@@ -62,12 +63,12 @@ Output: [{ "description": "mcdonalds", "value": 59.90 }, { "description": "super
 Input: headset 240.90 ifood 50 churrasco 39.90
 Output: [{"description": "headset",  "value": 240.90 }, {"description": "ifood", val: 50.00 }, {"description": "churrasco", "value": 39.90}]
 Input: Data;Estabelecimento;Portador;Valor;Parcela
-08/02/2024;FD*food.COM AGENCIA DE;VICTOR REIS;R$ 4,95;-
+08/02/2024;FD*food;R$ 4,95;-
 18/02/2024;Uno   *Noy   *TRIP;VICTOR REIS;R$ 14,88;-
 29/01/2024;MYPASS;VICTOR REIS;R$ 89,90;-
 Output: [{"description": "IFD*IFOOD.COM", "value": 4.95}, {"description": "ybe *ybe *trip", "value": 14.88},  {"description": "TOTALPASS", "value": 89.90}
 The output should not contains spaces or \\n, it should be an array of JSONs.
-"""${input}"""`
+"""${input.data}"""`
 
       const response = await openai.chat.completions.create({
         messages: [{ role: 'user', content: prompt }],
@@ -75,6 +76,7 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
       })
 
       console.log(response)
+      console.log(input.date)
 
       try {
         if (response.choices[0]) {
@@ -85,12 +87,10 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
 
           const transactions = responseObject.map(
             (value: { description: string; value: number }) => {
-              const date = new Date()
-
               return {
                 description: value.description,
                 type: 'expense',
-                date,
+                date: input.date,
                 category: 'other',
                 amount: value.value,
                 userId: ctx.session.user.id,
