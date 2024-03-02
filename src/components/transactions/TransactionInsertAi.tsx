@@ -10,10 +10,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '../ui/textarea'
 import { api } from '@/utils/api'
 import { useState } from 'react'
-import { validateTransactionInsert } from '../../utils/validations'
 import { DialogClose } from '@radix-ui/react-dialog'
 import DateFilter from '../DateFilter'
-import { date } from 'zod'
 
 interface TransactionsInsertAiDialogProps {
   refetch: () => void
