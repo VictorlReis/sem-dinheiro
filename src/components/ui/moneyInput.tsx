@@ -1,7 +1,13 @@
+/* eslint-disable */
 'use client'
 import { useReducer } from 'react'
-import { FormControl, FormField, FormItem, FormMessage } from '../ui/form' // Shadcn UI import
-import { Input } from '../ui/input' // Shandcn UI Input
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { UseFormReturn } from 'react-hook-form'
 
 type TextInputProps = {

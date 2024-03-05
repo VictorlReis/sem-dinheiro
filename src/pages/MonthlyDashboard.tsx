@@ -1,4 +1,4 @@
-import { Transaction } from '@prisma/client'
+import { type Transaction } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import DateFilter from '@/components/DateFilter'

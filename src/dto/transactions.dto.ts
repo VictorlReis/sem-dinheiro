@@ -19,6 +19,11 @@ export const CsvData = z.object({
   valor: z.string(),
 })
 
+export type AiModelResult = {
+  description: string
+  value: number
+}
+
 export const insertInputDto = z.object({
   date: z.date().refine((value) => !isNaN(value.getTime()), {
     message: 'Data inválida',

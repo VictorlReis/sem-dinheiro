@@ -2,9 +2,9 @@
 
 import * as React from 'react'
 import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Transaction } from '@prisma/client'
+import { type Transaction } from '@prisma/client'
 import { DataTablePagination } from './DataTablePagination'
 import { columns } from './Columns'
 import { Input } from '../ui/input'

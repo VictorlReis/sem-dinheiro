@@ -35,21 +35,23 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import MoneyInput from '../ui/moneyInput'
+import { type Transaction } from '@prisma/client'
 
 interface TransactionDialogProps {
-  transactionId?: string
+  transaction?: Transaction
 }
 
 const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
   const utils = api.useUtils()
+
   const form = useForm<z.infer<typeof createTransactionDto>>({
     resolver: zodResolver(createTransactionDto),
     defaultValues: {
-      description: '',
-      category: '',
-      type: 'expense',
-      amount: 0,
-      date: new Date(),
+      description: props.transaction?.description ?? '',
+      category: props.transaction?.category ?? '',
+      type: props.transaction?.type ?? 'expense',
+      amount: props.transaction?.amount ?? 0,
+      date: props.transaction?.date ?? new Date(),
     },
   })
 
@@ -59,16 +61,23 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
     },
   })
 
+  const { mutate: updateTransaction } = api.transaction.update.useMutation({
+    onSuccess: async () => {
+      await utils.transaction.invalidate()
+    },
+  })
+
   const onSubmit = (values: z.infer<typeof createTransactionDto>) => {
-    console.log(values)
-    createTransaction(values)
+    props.transaction
+      ? updateTransaction({ id: props.transaction.id, ...values })
+      : createTransaction(values)
     form.reset()
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {props.transactionId ? (
+        {props.transaction ? (
           <div className="hover:bg-secondary">
             <Button variant="link" className="ml-2">
               Editar
@@ -83,7 +92,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="ml-10">
             <DialogHeader>
               <DialogTitle className="font-bold flex justify-center">
-                Nova Transação
+                {props.transaction ? 'Editar Transação' : 'Nova Transação'}
               </DialogTitle>
             </DialogHeader>
             <section className="flex space-x-5 mt-4 mb-4 justify-center w-96">
@@ -178,7 +187,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
               </DialogClose>
               <DialogClose>
                 <Button type="submit" className="h-8 w-20">
-                  Criar
+                  {props.transaction ? 'Atualizar' : 'Criar'}
                 </Button>
               </DialogClose>
             </DialogFooter>
