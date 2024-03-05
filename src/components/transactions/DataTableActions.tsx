@@ -1,4 +1,4 @@
-import { Transaction } from '@prisma/client'
+import { type Transaction } from '@prisma/client'
 import { MoreHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { api } from '@/utils/api'
@@ -22,6 +22,12 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
     },
   })
 
+  const { mutate: updateTransaction } = api.transaction.update.useMutation({
+    onSuccess: async () => {
+      await utils.transaction.invalidate()
+    },
+  })
+
   const deleteSelectedRow = (
     transactionId: string,
     event?: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -40,7 +46,7 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
-          <TransactionDialog transactionId={props.transaction.id} />
+          <TransactionDialog transaction={props.transaction} />
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Button
@@ -57,7 +63,9 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
           <Button
             variant="link"
             onClick={() => {
-              console.log('editar')
+              const newAmount = props.transaction.amount / 2
+              updateTransaction({ ...props.transaction, amount: newAmount })
+              void navigator.clipboard.writeText(newAmount.toString())
             }}
           >
             Dividir

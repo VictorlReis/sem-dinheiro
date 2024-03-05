@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import {
-  CsvData,
+  type AiModelResult,
   createTransactionDto,
   insertInputDto,
 } from '@/dto/transactions.dto'
@@ -58,23 +58,20 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
 
       try {
         if (response.choices[0]) {
-          const responseString = response.choices[0].message?.content
+          const responseString = response.choices[0]?.message?.content
           if (!responseString) return false
-          const responseObject = JSON.parse(responseString)
-          console.log(responseObject)
+          const responseObject = JSON.parse(responseString) as AiModelResult[]
 
-          const transactions = responseObject.map(
-            (value: { description: string; value: number }) => {
-              return {
-                description: value.description,
-                type: 'expense',
-                date: input.date,
-                category: 'other',
-                amount: value.value,
-                userId: ctx.session.user.id,
-              }
-            },
-          )
+          const transactions = responseObject.map((value) => {
+            return {
+              description: value.description,
+              type: 'expense',
+              date: input.date,
+              category: 'other',
+              amount: value.value,
+              userId: ctx.session.user.id,
+            }
+          })
 
           return ctx.prisma.transaction.createMany({
             data: transactions,
@@ -138,4 +135,12 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
         },
       })
     }),
+
+  getById: protectedProcedure.input(z.string()).query(({ input, ctx }) => {
+    return ctx.prisma.transaction.findFirst({
+      where: {
+        id: input,
+      },
+    })
+  }),
 })
