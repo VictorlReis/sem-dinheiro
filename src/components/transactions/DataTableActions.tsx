@@ -1,13 +1,14 @@
 import { Transaction } from '@prisma/client'
+import { MoreHorizontal } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { api } from '@/utils/api'
+import TransactionDialog from './TransactionDialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@radix-ui/react-dropdown-menu'
-import { MoreHorizontal } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { api } from '@/utils/api'
+} from '@/components/ui/dropdown-menu'
 
 interface DataTableActionsProps {
   transaction: Transaction
@@ -37,9 +38,9 @@ export const DataTableActions: React.FC<DataTableActionsProps> = (props) => {
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <Button variant="link">Editar</Button>
+      <DropdownMenuContent>
+        <DropdownMenuItem asChild>
+          <TransactionDialog transactionId={props.transaction.id} />
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Button
