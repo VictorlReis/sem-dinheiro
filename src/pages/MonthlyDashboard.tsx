@@ -1,7 +1,6 @@
 import { Transaction } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import DateFilter from '@/components/DateFilter'
 import MonthlyChart from '@/components/MonthlyChart'
 import { TransactionsTable } from '@/components/transactions/Table'
@@ -12,8 +11,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { api } from '../utils/api'
-import CreateTransactionDialog from '@/components/transactions/CreateTransactionDialog'
-import { TransactionsInsertAiDialog } from '../components/transactions/TransactionInsertAi'
+import { TransactionsInsertAiDialog } from '@/components/transactions/TransactionInsertAi'
+import TransactionDialog from '@/components/transactions/TransactionDialog'
 
 const MonthlyDashboard: React.FC = () => {
   const { data: sessionData } = useSession()
@@ -67,7 +66,7 @@ const MonthlyDashboard: React.FC = () => {
           <article className="order-2 mt-6 w-full sm:order-1 sm:w-1/2 sm:pr-4 lg:mt-0">
             <section className="mb-5 items-center justify-between sm:flex-row">
               <section className="mb-5 flex space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <CreateTransactionDialog refetch={refetch} />
+                <TransactionDialog />
                 <TransactionsInsertAiDialog refetch={refetch} />
               </section>
               <section className="flex flex-row-reverse sm:mt-0">

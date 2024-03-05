@@ -36,13 +36,12 @@ import {
 } from '@/components/ui/select'
 import MoneyInput from '../ui/moneyInput'
 
-interface CreateTransactionDialogProps {
-  refetch: () => void
+interface TransactionDialogProps {
+  transactionId?: string
 }
 
-const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
-  props,
-) => {
+const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
+  const utils = api.useUtils()
   const form = useForm<z.infer<typeof createTransactionDto>>({
     resolver: zodResolver(createTransactionDto),
     defaultValues: {
@@ -55,8 +54,8 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
   })
 
   const { mutate: createTransaction } = api.transaction.create.useMutation({
-    onSuccess: () => {
-      props.refetch()
+    onSuccess: async () => {
+      await utils.transaction.invalidate()
     },
   })
 
@@ -69,7 +68,15 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Nova Transacao</Button>
+        {props.transactionId ? (
+          <div className="hover:bg-secondary">
+            <Button variant="link" className="ml-2">
+              Editar
+            </Button>
+          </div>
+        ) : (
+          <Button>Nova Transacao</Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
@@ -182,4 +189,4 @@ const CreateTransactionDialog: React.FC<CreateTransactionDialogProps> = (
   )
 }
 
-export default CreateTransactionDialog
+export default TransactionDialog
