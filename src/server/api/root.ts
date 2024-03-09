@@ -1,7 +1,7 @@
 import { transactionRouter } from '@/server/api/routers/transaction'
 import { createTRPCRouter } from '@/server/api/trpc'
 import { investmentTransactionRouter } from './routers/investmentTransactions'
-import { investmentTransaction } from '../../dto/investiments.dto'
+import { categoryRouter } from './routers/category'
 
 /**
  * This is the primary router for your server.
@@ -10,6 +10,7 @@ import { investmentTransaction } from '../../dto/investiments.dto'
  */
 export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
+  category: categoryRouter,
   investmentTransaction: investmentTransactionRouter,
 })
 

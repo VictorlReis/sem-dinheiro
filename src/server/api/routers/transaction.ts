@@ -54,7 +54,6 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
       })
 
       console.log(response)
-      console.log(input.date)
 
       try {
         if (response.choices[0]) {

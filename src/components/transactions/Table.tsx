@@ -32,6 +32,7 @@ import { type Transaction } from '@prisma/client'
 import { DataTablePagination } from './DataTablePagination'
 import { columns } from './Columns'
 import { Input } from '../ui/input'
+import { useState } from 'react'
 
 interface TransactionsTableProps {
   transactions: Transaction[]
@@ -39,13 +40,13 @@ interface TransactionsTableProps {
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = (props) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     [],
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data: props.transactions,

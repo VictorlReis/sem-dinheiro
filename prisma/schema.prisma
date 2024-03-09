@@ -50,8 +50,8 @@ model User {
     accounts              Account[]
     sessions              Session[]
     transactions          Transaction[]
-    nubankAccounts        NubankAccount[]
     InvestmentTransaction InvestmentTransaction[]
+    categories            Category[]
 }
 
 model VerificationToken {
@@ -71,6 +71,8 @@ model Transaction {
     amount      Float
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    categoryId  String   @default("1")
+    Category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model InvestmentTransaction {
@@ -84,10 +86,10 @@ model InvestmentTransaction {
     user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model NubankAccount {
-    id       String @id @default(cuid())
-    login    String
-    password String
-    userId   String @unique
-    user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Category {
+    id          String        @id @default(cuid())
+    name        String
+    Transaction Transaction[]
+    userId      String
+    user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
