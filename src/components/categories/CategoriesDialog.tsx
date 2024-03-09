@@ -1,5 +1,11 @@
 import { type Category } from '@prisma/client'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from '../ui/dialog'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { useState } from 'react'
@@ -39,14 +45,20 @@ const CategoriesDialog: React.FC<CategoriesDialogProps> = (props) => {
         <Button>{props.category ? 'Editar' : 'Nova categoria'}</Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col items-center p-8 w-60">
-        <DialogHeader>{props.category ? 'Editar categoria' : 'Nova categoria'}</DialogHeader>
+        <DialogHeader>
+          {props.category ? 'Editar categoria' : 'Nova categoria'}
+        </DialogHeader>
         <Input
-          className='w-36'
+          className="w-36"
           placeholder={props.category ? props.category.name : 'Categoria'}
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
         />
-        <Button onClick={handleBtnSubmit} className='w-20'>Salvar</Button>
+        <DialogClose>
+          <Button onClick={handleBtnSubmit} className="w-20">
+            Salvar
+          </Button>
+        </DialogClose>
       </DialogContent>
     </Dialog>
   )
