@@ -44,17 +44,6 @@ interface TransactionDialogProps {
 const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
   const utils = api.useUtils()
 
-  const form = useForm<z.infer<typeof createTransactionDto>>({
-    resolver: zodResolver(createTransactionDto),
-    defaultValues: {
-      description: props.transaction?.description ?? '',
-      category: props.transaction?.category ?? '',
-      type: props.transaction?.type ?? 'expense',
-      amount: props.transaction?.amount ?? 0,
-      date: props.transaction?.date ?? new Date(),
-    },
-  })
-
   const { mutate: createTransaction } = api.transaction.create.useMutation({
     onSuccess: async () => {
       await utils.transaction.invalidate()
@@ -64,6 +53,19 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
   const { mutate: updateTransaction } = api.transaction.update.useMutation({
     onSuccess: async () => {
       await utils.transaction.invalidate()
+    },
+  })
+
+  const { data: categories, refetch } = api.category.getAll.useQuery()
+
+  const form = useForm<z.infer<typeof createTransactionDto>>({
+    resolver: zodResolver(createTransactionDto),
+    defaultValues: {
+      description: props.transaction?.description ?? '',
+      category: props.transaction?.category ?? '',
+      type: props.transaction?.type ?? 'expense',
+      amount: props.transaction?.amount ?? 0,
+      date: props.transaction?.date ?? new Date(),
     },
   })
 
@@ -115,6 +117,30 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
                     <FormControl>
                       <Input placeholder="Categoria" {...field} />
                     </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Categoria" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories?.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

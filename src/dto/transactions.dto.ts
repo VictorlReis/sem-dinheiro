@@ -4,6 +4,7 @@ export const createTransactionDto = z
   .object({
     description: z.string().min(1),
     category: z.string().min(1),
+    categoryId: z.string().min(1),
     type: z.string().min(1),
     amount: z.number().min(0.01, {
       message: 'Error',

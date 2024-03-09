@@ -17,6 +17,7 @@ export const transactionRouter = createTRPCRouter({
           type: input.type,
           date: input.date,
           category: input.category,
+          categoryId: input.categoryId,
           amount: input.amount,
           userId: ctx.session.user.id,
         },
@@ -99,6 +100,7 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
         type: z.string(),
         date: z.date(),
         category: z.string(),
+        categoryId: z.string(),
         amount: z.number(),
       }),
     )
@@ -112,6 +114,7 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
           type: input.type,
           date: input.date,
           category: input.category,
+          categoryId: input.categoryId,
           amount: input.amount,
         },
       })
