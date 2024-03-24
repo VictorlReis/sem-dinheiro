@@ -4,6 +4,7 @@ import {
   type AiModelResult,
   createTransactionDto,
   insertInputDto,
+  FullTransactionDto,
 } from '@/dto/transactions.dto'
 import OpenAI from 'openai'
 
@@ -122,12 +123,12 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
 
   getMonthlyTransactions: protectedProcedure
     .input(z.object({ month: z.number(), year: z.number() }))
-    .query(({ input, ctx }) => {
+    .query(async ({ input, ctx }) => {
       const { month, year } = input
       const startDate = new Date(year, month - 1, 1)
       const endDate = new Date(year, month, 0)
 
-      return ctx.prisma.transaction.findMany({
+      const transactions = await ctx.prisma.transaction.findMany({
         where: {
           userId: ctx.session.user.id,
           date: {
@@ -136,13 +137,45 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
           },
         },
       })
+
+      console.log(transactions)
+
+      const categories = await ctx.prisma.category.findMany({
+        where: {
+          userId: ctx.session.user.id,
+        },
+      })
+
+      return transactions.map((transaction) => {
+        const category = categories.find(
+          (category) => category.id === transaction.categoryId,
+        )
+        return {
+          ...transaction,
+          category: category?.name,
+        }
+      }) as FullTransactionDto[]
     }),
 
-  getById: protectedProcedure.input(z.string()).query(({ input, ctx }) => {
-    return ctx.prisma.transaction.findFirst({
-      where: {
-        id: input,
-      },
-    })
-  }),
+  getById: protectedProcedure
+    .input(z.string())
+    .query(async ({ input, ctx }) => {
+      const transaction = await ctx.prisma.transaction.findFirst({
+        where: {
+          id: input,
+        },
+      })
+      const categories = await ctx.prisma.category.findMany({
+        where: {
+          userId: ctx.session.user.id,
+        },
+      })
+      const category = categories.find(
+        (category) => category.id === transaction?.categoryId,
+      )
+      return {
+        ...transaction,
+        category: category,
+      }
+    }),
 })

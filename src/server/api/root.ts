@@ -1,6 +1,5 @@
 import { transactionRouter } from '@/server/api/routers/transaction'
 import { createTRPCRouter } from '@/server/api/trpc'
-import { investmentTransactionRouter } from './routers/investmentTransactions'
 import { categoryRouter } from './routers/category'
 
 /**
@@ -11,7 +10,6 @@ import { categoryRouter } from './routers/category'
 export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
   category: categoryRouter,
-  investmentTransaction: investmentTransactionRouter,
 })
 
 // export type definition of API

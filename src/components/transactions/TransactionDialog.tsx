@@ -56,7 +56,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
     },
   })
 
-  const { data: categories, refetch } = api.category.getAll.useQuery()
+  const { data: categories } = api.category.getAll.useQuery()
 
   const form = useForm<z.infer<typeof createTransactionDto>>({
     resolver: zodResolver(createTransactionDto),
@@ -120,7 +120,6 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="categoryId"

@@ -1,4 +1,3 @@
-import { type Transaction } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import DateFilter from '@/components/DateFilter'
@@ -13,6 +12,7 @@ import {
 import { api } from '../utils/api'
 import { TransactionsInsertAiDialog } from '@/components/transactions/TransactionInsertAi'
 import TransactionDialog from '@/components/transactions/TransactionDialog'
+import { type FullTransactionDto } from '@/dto/transactions.dto'
 
 const MonthlyDashboard: React.FC = () => {
   const { data: sessionData } = useSession()
@@ -23,6 +23,7 @@ const MonthlyDashboard: React.FC = () => {
   const [sumIncome, setSumIncome] = useState(0)
   const [total, setTotal] = useState(0)
 
+  const { data: categories } = api.category.getAll.useQuery()
   const { data: transactions, refetch } =
     api.transaction.getMonthlyTransactions.useQuery(
       {
@@ -35,12 +36,13 @@ const MonthlyDashboard: React.FC = () => {
     )
 
   useEffect(() => {
+    console.log(transactions)
     if (transactions) {
       sumTotal(transactions)
     }
   }, [transactions])
 
-  const sumTotal = (transactions: readonly Transaction[]) => {
+  const sumTotal = (transactions: readonly FullTransactionDto[]) => {
     const { sumExpenses, sumIncome } = transactions.reduce(
       (sums, transaction) => {
         if (transaction.type === 'expense') {
@@ -120,18 +122,8 @@ const MonthlyDashboard: React.FC = () => {
               </Card>
             </article>
             <MonthlyChart
-              data={transactions ?? []}
-              reducer={(acc, transaction) => {
-                if (transaction.type === 'income') return acc
-                const { category, amount } = transaction
-
-                if (!acc[category]) {
-                  acc[category] = 0
-                }
-
-                acc[category] += amount
-                return acc
-              }}
+              transactions={transactions ?? []}
+              categories={categories ?? []}
             />
           </aside>
         </article>

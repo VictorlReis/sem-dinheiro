@@ -15,6 +15,22 @@ export const createTransactionDto = z
   })
   .required()
 
+export type FullTransactionDto = {
+  category: string
+  Category: {
+    id: string
+    name: string
+    userId: string
+  }
+  id: string
+  description: string
+  type: string
+  date: Date
+  amount: number
+  userId: string
+  categoryId: string
+}
+
 export const CsvData = z.object({
   estabelecimento: z.string(),
   valor: z.string(),

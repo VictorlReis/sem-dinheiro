@@ -1,8 +1,8 @@
 'use client'
 
-import { Transaction } from '@prisma/client'
+import { type Transaction } from '@prisma/client'
 import { Checkbox } from '@radix-ui/react-checkbox'
-import { ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataTableActions } from './DataTableActions'

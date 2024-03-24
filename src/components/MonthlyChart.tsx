@@ -1,9 +1,10 @@
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { type Category, type Transaction } from '@prisma/client'
 import { Pie } from 'react-chartjs-2'
 
-interface MonthlyChartProps<T> {
-  data: T[]
-  reducer: (acc: CategoryData, value: T) => CategoryData
+interface MonthlyChartProps {
+  transactions: Transaction[]
+  categories: Category[]
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -11,16 +12,25 @@ interface CategoryData {
   [category: string]: number
 }
 
-const MonthlyChart: <T>(props: MonthlyChartProps<T>) => JSX.Element = ({
-  data: transactions,
-  reducer,
+const MonthlyChart: React.FC<MonthlyChartProps> = ({
+  transactions,
+  categories,
 }) => {
-  const categoryData: CategoryData = transactions.reduce(
-    reducer,
-    {} as { [key: string]: number },
-  )
+  const categoryData: CategoryData = transactions.reduce((acc, transaction) => {
+    if (transaction.type === 'income') return acc
+    const { categoryId, amount } = transaction
 
-  const categories: string[] = Object.keys(categoryData)
+    const category = categories.find((c) => c.id === categoryId)
+
+    if (!acc[category?.name ?? 'Other']) {
+      acc[category?.name ?? 'Other'] = 0
+    }
+
+    acc[category?.name ?? 'Other'] += amount
+    return acc
+  }, {} as { [key: string]: number })
+
+  const categoriesData: string[] = Object.keys(categoryData)
   const amounts: number[] = Object.values(categoryData)
 
   const colorsArray = [
@@ -66,7 +76,7 @@ const MonthlyChart: <T>(props: MonthlyChartProps<T>) => JSX.Element = ({
   ]
 
   const data = {
-    labels: categories,
+    labels: categoriesData,
     datasets: [
       {
         data: amounts,
@@ -88,7 +98,7 @@ const MonthlyChart: <T>(props: MonthlyChartProps<T>) => JSX.Element = ({
   }
 
   return (
-    <section className="sm:ml-0 sm:h-[35em] sm:w-[35em] lg:ml-32 lg:h-[30em] lg:w-[30em]">
+    <section className="lg:h-[30em] sm:h-[35em] sm:w-[35em] lg:w-[30em] lg:ml-32 sm:ml-0">
       <Pie data={data} options={options} />
     </section>
   )
