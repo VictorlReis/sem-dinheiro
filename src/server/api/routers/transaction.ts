@@ -4,7 +4,7 @@ import {
   type AiModelResult,
   createTransactionDto,
   insertInputDto,
-  FullTransactionDto,
+  type FullTransactionDto,
 } from '@/dto/transactions.dto'
 import OpenAI from 'openai'
 
@@ -17,7 +17,7 @@ export const transactionRouter = createTRPCRouter({
           description: input.description,
           type: input.type,
           date: input.date,
-          category: input.category,
+          category: '',
           categoryId: input.categoryId,
           amount: input.amount,
           userId: ctx.session.user.id,
@@ -54,8 +54,6 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
         messages: [{ role: 'user', content: prompt }],
         model: 'gpt-3.5-turbo',
       })
-
-      console.log(response)
 
       try {
         if (response.choices[0]) {
@@ -100,7 +98,6 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
         id: z.string(),
         type: z.string(),
         date: z.date(),
-        category: z.string(),
         categoryId: z.string(),
         amount: z.number(),
       }),
@@ -114,7 +111,6 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
           description: input.description,
           type: input.type,
           date: input.date,
-          category: input.category,
           categoryId: input.categoryId,
           amount: input.amount,
         },
@@ -137,8 +133,6 @@ The output should not contains spaces or \\n, it should be an array of JSONs.
           },
         },
       })
-
-      console.log(transactions)
 
       const categories = await ctx.prisma.category.findMany({
         where: {

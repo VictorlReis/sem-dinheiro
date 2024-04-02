@@ -82,6 +82,7 @@ const MonthlyDashboard: React.FC = () => {
             </section>
             <TransactionsTable
               transactions={transactions ?? []}
+              categories={categories ?? []}
               refetch={refetch}
             />
           </article>

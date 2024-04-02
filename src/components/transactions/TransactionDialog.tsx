@@ -62,7 +62,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
     resolver: zodResolver(createTransactionDto),
     defaultValues: {
       description: props.transaction?.description ?? '',
-      category: props.transaction?.category ?? '',
+      categoryId: props.transaction?.categoryId ?? 'Categoria',
       type: props.transaction?.type ?? 'expense',
       amount: props.transaction?.amount ?? 0,
       date: props.transaction?.date ?? new Date(),
@@ -111,21 +111,13 @@ const TransactionDialog: React.FC<TransactionDialogProps> = (props) => {
               />
               <FormField
                 control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Categoria" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <Select onValueChange={field.onChange}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Categoria" />
