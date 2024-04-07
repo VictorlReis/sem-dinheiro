@@ -13,10 +13,9 @@ import { api } from '../utils/api'
 import { TransactionsInsertAiDialog } from '@/components/transactions/TransactionInsertAi'
 import TransactionDialog from '@/components/transactions/TransactionDialog'
 import { type FullTransactionDto } from '@/dto/transactions.dto'
+import { sessionData } from '@/lib/localSession'
 
 const MonthlyDashboard: React.FC = () => {
-  const { data: sessionData } = useSession()
-
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
   const [sumExpenses, setSumExpenses] = useState(0)

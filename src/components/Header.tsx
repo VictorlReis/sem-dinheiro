@@ -10,10 +10,9 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from './ui/navigation-menu'
+import { sessionData } from '@/lib/localSession'
 
 export const Header = () => {
-  const { data: sessionData } = useSession()
-
   return (
     <header className="flex flex-row gap-2 justify-between p-2">
       <section className="flex flex-row gap-2 font-bold ">

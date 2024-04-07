@@ -3,14 +3,13 @@ import { Header } from './Header'
 import { signIn, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from './ModeToggle'
+import { sessionData } from '@/lib/localSession'
 
 interface LayoutProps {
   children: ReactNode
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { data: sessionData } = useSession()
-
   return !sessionData?.user ? (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl text-center">Sem Dinheiro</h1>
