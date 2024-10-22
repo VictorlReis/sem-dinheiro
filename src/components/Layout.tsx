@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react'
 import { Header } from './Header'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from './ModeToggle'
 import { sessionData } from '@/lib/localSession'

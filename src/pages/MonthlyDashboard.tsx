@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import DateFilter from '@/components/DateFilter'
 import MonthlyChart from '@/components/MonthlyChart'
